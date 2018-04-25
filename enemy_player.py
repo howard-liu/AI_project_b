@@ -1,7 +1,9 @@
 ###
-# This is the Player class that serves to decide and return which moves to do
-# to perform to the referee program. This file will be the one that is marked
-# for Part B of the project.
+# This Python module will implement an enemy player class using a variety of
+# different strategies. It's purpose is to serve as a baseline to benchmark
+# our implemented Player class against to check performance. It's difficulty
+# will be tweaked to use older strategies of our Player class whenever a new
+# one is being tested.
 ###
 
 from board_state import *
@@ -11,12 +13,13 @@ from moving_strategy import *
 
 class Player:
     """
-    Player class that is capable of playing a complete game of 'Watch your back'
-    when used in the referee.py program
+    Enemy player class that is also capable of playing a complete game of
+    'Watch your back' when used in the referee.py program. Serves as a baseline
+    to test Player class against.
     """
     def __init__(self, colour):
-        # Assign the character representing enemy pieces depending on the player
-        # colour as well as what the player's piece is
+        # Assign the character representing enemy pieces depending on the colour
+        #  as well as what the player's piece is
         if colour == 'white':
             self.enemy = '@'
             self.piece = 'O'
@@ -36,8 +39,6 @@ class Player:
         :return: A tuple if it is a placement action, a tuple of tuples if it is
                  a movement action and None if it is a forfeit action.
         """
-        # Start off with a forfeited move and see if we can do anything
-        action = None
         # Increment total turns every time this method is called
         self.total_turns += 1
         # Placing phase continues until we reach our 13th action

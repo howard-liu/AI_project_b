@@ -6,18 +6,41 @@
 from action import *
 from board_state import *
 from player import *
+import enemy_player as ep
 from placing_strategy import *
 from moving_strategy import *
 
 player = Player('white')
-for i in range(12):
-    player.action(i)
-    # print(player.board)
+enemy_player = ep.Player('black')
+board = BoardState()
 
-print(player.board)
-for i in range(5):
-    player.action(i)
-    print(player.board)
+# Movement Phase
+for i in range(12):
+    player_action = Action(board, '@', player.action(i))
+    board.modify(player_action, '@')
+    enemy_player.update(player_action.return_action())
+    # print(board)
+
+    enemy_action = Action(board, 'O', enemy_player.action(i))
+    board.modify(enemy_action, 'O')
+    player.update(enemy_action.return_action())
+    # print(board)
+
+print(board)
+
+for i in range(256):
+    player_action = Action(board, '@', player.action(i))
+    board.modify(player_action, '@')
+    enemy_player.update(player_action.return_action())
+    print(board)
+    print("Remaining blacks = " + str(len(board.search_board('B'))))
+
+    enemy_action = Action(board, 'O', enemy_player.action(i))
+    board.modify(enemy_action, 'O')
+    player.update(enemy_action.return_action())
+    print(board)
+    print("Remaining whites = " + str(len(board.search_board('W'))))
+
 
 # board = BoardState()
 # print(Action(board, '@', action=(4, 4)))

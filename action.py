@@ -29,9 +29,10 @@ class Action:
         # Assign the values read from the parameters
         if move is not None:
             # If a move is specified, then its always a movement type action
-            self.move = move
+            self.move = Move(board_state, move.curr_col, move.curr_row,
+                             move.new_col, move.new_row, enemy)
             self.move_type = 'move'
-        else:
+        elif action is not None:
             coords = self.__convert_action__(action)
             curr_col = coords[0][0]
             curr_row = coords[0][1]
@@ -40,6 +41,10 @@ class Action:
             self.move_type = coords[2]
             self.move = Move(board_state, curr_col, curr_row, new_col, new_row,
                              enemy)
+        else:
+            # This is a forfeited move
+            self.move = None
+            self.move_type = 'forfeit'
 
     def __str__(self):
         """
@@ -89,7 +94,6 @@ class Action:
         output = (move.curr_col, move.curr_row), (move.new_col, move.new_row)
         cls.return_action()
 
-
     def return_action(self):
         """
         This function returns the move in the format required by the referee.py
@@ -102,7 +106,7 @@ class Action:
             return self.move.curr_col, self.move.curr_row
         # If new column or row was specified then it must be a movement move
         elif self.move_type == 'move':
-            return (self.move.curr_row, self.move.curr_row), \
+            return (self.move.curr_col, self.move.curr_row), \
                    (self.move.new_col, self.move.new_row)
         # Otherwise this is a forfeited move
         else:
