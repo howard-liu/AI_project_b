@@ -25,7 +25,7 @@ def do_random_move(board_state, enemy):
 
     # Pick a random move to do if there is a valid one
     if len(poss_moves) != 0:
-        move = poss_moves[random.randint(0, len(poss_moves))]
+        move = poss_moves[random.randint(0, len(poss_moves)-1)]
         action = Action(board_state, enemy, action=None, move=move)
     else:
         # This is a forfeited action. There are no possible moves.

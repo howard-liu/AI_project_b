@@ -186,14 +186,17 @@ class BoardState:
             piece = 'O'
         else:
             piece = '@'
-        # Choose the correct movement method
-        if action.move_type == 'place':
-            self.__place_piece__(action.move, piece)
-        elif action.move_type == 'move':
-            self.__move_piece__(action.move)
-        else:
-            # The move must have been a forfeit one. Do nothing to the board
+        # Choose the correct movement method\
+        if action is None:
+            # Do nothing to the board if the movement is a forfeited one
             return
+        elif action.move_type == 'place':
+            self.__place_piece__(action.move, piece)
+            self.eliminate_piece()
+        elif action.move_type == 'move':
+            # The move must have been a movement one.
+            self.__move_piece__(action.move)
+            self.eliminate_piece()
 
     def __place_piece__(self, move, piece):
         """
