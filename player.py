@@ -15,6 +15,9 @@ class Player:
     Player class that is capable of playing a complete game of 'Watch your back'
     when used in the referee.py program
     """
+    # Each player has 12 pieces
+    TOTAL_PIECES = 12
+
     def __init__(self, colour):
         # Assign the character representing enemy pieces depending on the player
         # colour as well as what the player's piece is
@@ -37,12 +40,15 @@ class Player:
         :return: A tuple if it is a placement action, a tuple of tuples if it is
                  a movement action and None if it is a forfeit action.
         """
+        # TODO
+        # Can't self.total_turns be replaced by turns (the input argument)?
+
         # Start off with a forfeited move and see if we can do anything
         action = None
         # Increment total turns every time this method is called
         self.total_turns += 1
         # Placing phase continues until we reach our 13th action
-        if self.total_turns <= 12:
+        if self.total_turns <= self.TOTAL_PIECES:
             action = do_random_place(self.board, self.enemy)
             self.board.modify(action, self.enemy)
         else:

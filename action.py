@@ -48,6 +48,13 @@ class Action:
         """
         return str(self.return_action())
 
+    def tuple(self):
+        """
+        Function that returns the tuple representation of the action
+        :return:
+        """
+        return tuple(self.return_action())
+
     @classmethod
     def __convert_action__(cls, action):
         """

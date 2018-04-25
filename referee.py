@@ -19,7 +19,7 @@ def main():
     print(VERSION_INFO)
 
     # initialise the game and players
-    game  = _Game()
+    game = _Game()
     white = _Player(options.white_player, 'white')
     black = _Player(options.black_player, 'black')
 
@@ -349,7 +349,7 @@ class _Game:
         :raises _InvalidActionException: (every time)
         """
         self.phase = 'invalid'
-        self.loser  = self._piece()
+        self.loser = self._piece()
         self.winner = self._other()
         raise _InvalidActionException(reason)
 
