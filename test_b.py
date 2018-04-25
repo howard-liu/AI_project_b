@@ -7,11 +7,20 @@ from action import *
 from board_state import *
 from player import *
 from placing_strategy import *
+from moving_strategy import *
 
 player = Player('white')
-for i in range(13):
+for i in range(12):
+    player.action(i)
+    # print(player.board)
+
+print(player.board)
+for i in range(5):
     player.action(i)
     print(player.board)
+
+# board = BoardState()
+# print(Action(board, '@', action=(4, 4)))
 
 # board.modify(Action(board, action=(6, 5), enemy='@'), '@')
 # print(board)

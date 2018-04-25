@@ -11,25 +11,35 @@ class Action:
     This class contains the information regarding the type of action that is to
     be played or for a player to update
     """
-    def __init__(self, board_state, action, enemy):
+    def __init__(self, board_state, enemy, action=None, move=None):
         """
         Initialises and validates a passed in action which is simply a tuple or
         tuple of tuples.
         :param board_state: BoardState object containing information about the
                             current state of the game
+        :param enemy: A character that represents the enemy piece
         :param action: Value representing a placing action which is a single
                        tuple, a movement action which is a tuple of tuples and
-                       a forfeited action which is simple the None value
-        :param enemy: A character that represents the enemy piece
+                       a forfeited action which is simply the None value. Defaults
+                       to None
+        :param move: Optional paramter. If move is not None then an Action object
+                     will be created from an existing Move object that represents
+                     movement actions
         """
-        # Assign the values read from action
-        coords = self.__convert_action__(action)
-        curr_col = coords[0][0]
-        curr_row = coords[0][1]
-        new_col = coords[1][0]
-        new_row = coords[1][1]
-        self.move_type = coords[2]
-        self.move = Move(board_state, enemy, curr_col, curr_row, new_col, new_row)
+        # Assign the values read from the parameters
+        if move is not None:
+            # If a move is specified, then its always a movement type action
+            self.move = move
+            self.move_type = 'move'
+        else:
+            coords = self.__convert_action__(action)
+            curr_col = coords[0][0]
+            curr_row = coords[0][1]
+            new_col = coords[1][0]
+            new_row = coords[1][1]
+            self.move_type = coords[2]
+            self.move = Move(board_state, curr_col, curr_row, new_col, new_row,
+                             enemy)
 
     def __str__(self):
         """
@@ -67,6 +77,19 @@ class Action:
 
             return None
 
+    @classmethod
+    def convert_move(cls, move):
+        """
+        This function takes a Move object and converts it into the representation
+        for an action
+        :param move: A Move object to convert
+        :return: A tuple of tuples with the format
+                        ((col, row), (new_col, new_row))
+        """
+        output = (move.curr_col, move.curr_row), (move.new_col, move.new_row)
+        cls.return_action()
+
+
     def return_action(self):
         """
         This function returns the move in the format required by the referee.py
@@ -84,3 +107,4 @@ class Action:
         # Otherwise this is a forfeited move
         else:
             return
+

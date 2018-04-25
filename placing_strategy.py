@@ -8,7 +8,7 @@ from action import *
 
 
 # MAX number of attempts to check before giving up
-MAX_ATTEMPTS = 100
+MAX_ATTEMPTS = 10
 
 
 def do_random_place(board_state, enemy):
@@ -25,7 +25,7 @@ def do_random_place(board_state, enemy):
         try:
             col = random.randint(0, 7)
             row = random.randint(0, 7)
-            action = Action(board_state, (col, row), enemy)
+            action = Action(board_state, enemy, action=(col, row))
             attempts += 1
         except InvalidMoveError:
             pass

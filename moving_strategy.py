@@ -8,10 +8,6 @@ from action import *
 from move import generate_moves
 
 
-# MAX number of attempts to check before giving up
-MAX_ATTEMPTS = 100
-
-
 def do_random_move(board_state, enemy):
     """
     Function that will do random placement actions
@@ -19,32 +15,20 @@ def do_random_move(board_state, enemy):
     :param enemy: Character representing the enemy piece
     :return: An action or None if it is forfeited action
     """
-    # Get a list of the current pieces on the board
+    # Get a list of all the current moves that the play could possibly make
     if enemy == '@':
-        # Enemy is black, so search for white pieces on the board
-        pieces = board_state.search_board('W')
+        # If black is the enemy, then get poss_moves for white pieces
+        poss_moves = generate_moves(board_state, 'W')
     else:
-        # Search for black pieces
-        pieces = board_state.search_board('B')
+        # White is the enemy
+        poss_moves = generate_moves(board_state, 'B')
 
-    # Now pick a random piece to move
-    piece_ind = random.randint(0, len(pieces))
-
-    action = None
-    attempts = 0
-    while action is None and attempts < MAX_ATTEMPTS:
-        try:
-            col = random.randint(0, 7)
-            row = random.randint(0, 7)
-            action = Action(board_state, (col, row), enemy)
-            attempts += 1
-        except InvalidMoveError:
-            pass
-
-    if action is None:
-        print("ERROR: NO VALID VALUE FOUND")
-        exit()
+    # Pick a random move to do if there is a valid one
+    if len(poss_moves) != 0:
+        move = poss_moves[random.randint(0, len(poss_moves))]
+        action = Action(board_state, enemy, action=None, move=move)
     else:
-        return action
+        # This is a forfeited action. There are no possible moves.
+        action = None
 
-    return
+    return action

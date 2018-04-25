@@ -13,8 +13,8 @@ class Move:
     """
     This class represents a valid move in the game "Watch your Back!"
     """
-    def __init__(self, board_state, enemy=None, col=None, row=None,
-                 new_col=None, new_row=None, ):
+    def __init__(self, board_state, col=None, row=None, new_col=None,
+                 new_row=None, enemy=None):
         """
         A move object contains the coordinates of the piece to be moved as well
         as the coordinates of the new location that the piece will be moved to
@@ -22,12 +22,12 @@ class Move:
                             current state of the game
         :param col: The column number this move refers to. Defaults to None
         :param row: The row number this move refers to. Defaults to None
-        :param enemy: A character that represents an enemy piece on the board.
-                      Defaults to None if no character is specified.
         :param new_col: The new column number this move will place the piece to.
                         Defaults to None when the move is a placing move.
         :param new_row: The new row number this move will place the piece to.
                         Defaults to None when this move is a placing move.
+        :param enemy: A character that represents an enemy piece on the board.
+                      Defaults to None if no character is specified.
         """
 
         # Check if the move is valid before creating the object

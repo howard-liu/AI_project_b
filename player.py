@@ -7,6 +7,7 @@
 from board_state import *
 from action import *
 from placing_strategy import *
+from moving_strategy import *
 
 
 class Player:
@@ -44,6 +45,10 @@ class Player:
         if self.total_turns <= 12:
             action = do_random_place(self.board, self.enemy)
             self.board.modify(action, self.enemy)
+        else:
+            action = do_random_move(self.board, self.enemy)
+            print(action.move)
+            self.board.modify(action, self.enemy)
         # Consider the shrinking phases. Before the start of turns 128 and 192
         # So on turn 126 or 127, 190 or 191 depending on which player will be
         # the last chance to escape shrinkage etc.
@@ -58,5 +63,6 @@ class Player:
         :return:
         """
         # Placeholder to update the board from enemy perspective
-        self.board.modify(Action(self.board, action, enemy=self.piece), self.piece)
+        self.board.modify(Action(self.board, enemy=self.piece, action=action),
+                          self.piece)
         return None
