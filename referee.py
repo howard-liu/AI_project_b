@@ -19,7 +19,7 @@ def main():
     print(VERSION_INFO)
 
     # initialise the game and players
-    game = _Game()
+    game  = _Game()
     white = _Player(options.white_player, 'white')
     black = _Player(options.black_player, 'black')
 
@@ -119,7 +119,6 @@ def _load_player(modulename, package='.'):
 # You should design and use your own representation of the game and board
 # state, optimised with your specific usage in mind: deciding which action to
 # to choose each turn.
-
 
 class _Game:
     """Represent the state of a game of Watch Your Back!"""
@@ -349,7 +348,7 @@ class _Game:
         :raises _InvalidActionException: (every time)
         """
         self.phase = 'invalid'
-        self.loser = self._piece()
+        self.loser  = self._piece()
         self.winner = self._other()
         raise _InvalidActionException(reason)
 

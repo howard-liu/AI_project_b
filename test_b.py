@@ -41,6 +41,8 @@ for i in range(256):
     print(board)
     print("Remaining whites = " + str(len(board.search_board('W'))))
 
+for move in generate_moves(board, 'W'):
+    print(move)
 
 # board = BoardState()
 # print(Action(board, '@', action=(4, 4)))

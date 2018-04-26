@@ -16,8 +16,6 @@ class NoBoardReadError(Exception):
 
 class BoardState:
 
-    # Class variables to store the current number of rows and cols this
-    # board state has
     NUM_COLS = 8
     NUM_ROWS = 8
 
@@ -35,11 +33,22 @@ class BoardState:
         :param other_state: Another BoardState object to copy the board from
         """
 
+        # Variable storing number of shrinks that has occurred
+        self.n_shrinks = 0
+
+        # Variables storing the current range of cols and rows that allow pieces
+        # to be legally placed on
+        self.min_col = 0
+        self.max_col = 7
+        self.min_row = 0
+        self.max_row = 7
+
+
         # Coordinate access is of the format self.board[col][row]. Initialise
         # all values to empty spaces denoted by "-" as well as adding in the
         # initial corner squares.
-        self.board = [['-' for j in range(self.NUM_ROWS)]
-                      for i in range(self.NUM_COLS)]
+        self.board = [['-' for j in range(self.max_row + 1)]
+                      for i in range(self.max_col + 1)]
         for coord in [(0, 0), (7, 0), (7, 7), (0, 7)]:
             col, row = coord
             self.board[col][row] = 'X'
@@ -68,7 +77,7 @@ class BoardState:
         board data structure.
         :return:
         """
-        for i in range(self.NUM_ROWS):
+        for i in range(self.max_row + 1):
             # Read in one line
             line = input()
             # Split it based on whitespace
@@ -156,8 +165,8 @@ class BoardState:
             piece_char = '@'
 
         # Looping across entire board and then adding to the output
-        for i in range(self.NUM_COLS):
-            for j in range(self.NUM_ROWS):
+        for i in range(self.max_row + 1):
+            for j in range(self.max_col + 1):
                 if self.board[j][i] == piece_char:
                     output.append((j, i))
 
@@ -198,6 +207,37 @@ class BoardState:
             self.__move_piece__(action.move)
             self.eliminate_piece()
 
+    def shrink_board(self):
+        """
+        When called this method will shrink the board and eliminate any pieces
+        that are no longer in a legal position.
+        IMPORTANT NOTE: COPIES MOST CODE FROM THE SHRINK BOARD METHOD included
+        in referee.py written by Matt Farrugia and Shreyash Patodia
+        :return: None
+        """
+        # Number of shrinks that has currently take place for this current state
+        s = self.n_shrinks
+
+        # Now remove the spots on the outer edge of the board
+        for i in range(s, 8 - s):
+            for square in [(i, s), (s, i), (i, 7-s), (7-s, i)]:
+                row, col = square
+                self.board[col][row] = ' '
+
+        # Increment the number of shrinks that has occurred. Also modify the
+        # variables storing the legal area of the board now
+        self.n_shrinks = s = s + 1
+        self.min_col += 1
+        self.max_col -= 1
+        self.min_row += 1
+        self.max_row -= 1
+
+        # Add the new corners and eliminate the pieces on the board
+        for corner in [(s, s), (s, 7-s), (7-s, 7-s), (7-s, s)]:
+            row, col = corner
+            self.board[col][row] = 'X'
+        self.eliminate_piece()
+
     def __place_piece__(self, move, piece):
         """
         This function adds a piece to the board during the placing phase.
@@ -237,7 +277,7 @@ class BoardState:
         """
         # Only check left and right if the piece is not at the very edge
         # of the board
-        if col != 0 and col != self.NUM_COLS - 1:
+        if col != self.min_col and col != self.max_col:
             # Check if both right and left sides are blocked by a corner or
             # a black piece
             if self.board[col + 1][row] == enemy and \
@@ -263,7 +303,7 @@ class BoardState:
         """
         # Only check up and down if the piece is not at the very edge
         # of the board
-        if row != 0 and row != self.NUM_ROWS - 1:
+        if row != self.min_row and row != self.max_row:
             # Check if both up and down sides are blocked by a corner or a
             # black piece
             if self.board[col][row + 1] == enemy and \

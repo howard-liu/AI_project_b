@@ -41,12 +41,17 @@ class Player:
         """
         # TODO
         # Can't self.total_turns be replaced by turns (the input argument)?
+        # Not it can't be. self.total_turns counts how many times this player
+        # has made its move since the beginning of the game. turns only reports
+        # all of the turns that have been made for a current phase i.e. it resets
+        # to 0 when it reaches the movement phase
 
         # Start off with a forfeited move and see if we can do anything
         action = None
         # Increment total turns every time this method is called
         self.total_turns += 1
         # Placing phase continues until we reach our 13th action
+        print(self.board)
         if self.total_turns <= self.TOTAL_PIECES:
             action = do_random_place(self.board, self.enemy)
             self.board.modify(action, self.enemy)
@@ -54,8 +59,10 @@ class Player:
             action = do_random_move(self.board, self.enemy)
             self.board.modify(action, self.enemy)
         # Consider the shrinking phases. Before the start of turns 128 and 192
-        # So on turn 126 or 127, 190 or 191 depending on which player will be
-        # the last chance to escape shrinkage etc.
+        # So on turn 126 or 127, 190 or 191 depending on the player.
+        # In actuality, using total_turns that is incremented the shrinking
+        # phases begin when total_turns = 12 + 64 = 76.
+        # Also when turns = 76 + 32 = 108
 
         if action is None:
             return action
