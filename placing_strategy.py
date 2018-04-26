@@ -91,7 +91,7 @@ def blacklist_bad_tiles(board_state, enemy):
         tile_list.append(look_left(enemy_tile[0], enemy_tile[1]))
         tile_list.append(look_right(enemy_tile[0], enemy_tile[1]))
 
-
+ 
 def centre_place_strategy(board_state, enemy):
     """
     Simple blind strategy that places pieces from the centre
