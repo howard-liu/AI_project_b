@@ -69,7 +69,7 @@ class BoardState:
             raise NoBoardReadError('Data is not in correct format. Please'
                                    ' check the inputs')
         # Make sure any pieces that should be eliminated are eliminated
-        self.eliminate_piece()
+        self.static_eliminate_piece()
 
     def __read_input__(self):
         """
@@ -201,11 +201,11 @@ class BoardState:
             return
         elif action.move_type == 'place':
             self.__place_piece__(action.move, piece)
-            self.eliminate_piece()
+            self.eliminate_piece(action.move.curr_col, action.move.curr_row, enemy)
         elif action.move_type == 'move':
             # The move must have been a movement one.
             self.__move_piece__(action.move)
-            self.eliminate_piece()
+            self.eliminate_piece(action.move.new_col, action.move.new_row, enemy)
 
     def shrink_board(self):
         """
@@ -236,7 +236,7 @@ class BoardState:
         for corner in [(s, s), (s, 7-s), (7-s, 7-s), (7-s, s)]:
             row, col = corner
             self.board[col][row] = 'X'
-        self.eliminate_piece()
+        self.static_eliminate_piece()
 
     def __place_piece__(self, move, piece):
         """
@@ -279,7 +279,7 @@ class BoardState:
         # of the board
         if col != self.min_col and col != self.max_col:
             # Check if both right and left sides are blocked by a corner or
-            # a black piece
+            # a enemy piece
             if self.board[col + 1][row] == enemy and \
                             self.board[col - 1][row] == enemy:
                 # Then the piece gets destroyed
@@ -305,7 +305,7 @@ class BoardState:
         # of the board
         if row != self.min_row and row != self.max_row:
             # Check if both up and down sides are blocked by a corner or a
-            # black piece
+            # enemy piece
             if self.board[col][row + 1] == enemy and \
                self.board[col][row - 1] == enemy:
                 # Then the piece gets destroyed
@@ -317,10 +317,62 @@ class BoardState:
                     self.board[col][row - 1] == enemy:
                 return True
 
-    def eliminate_piece(self):
+    def __surround_elim__(self, col, row, enemy):
+        """
+        This function eliminates the piece at col, row if it has been surrounded
+        by an enemy piece or is blocked in by an enemy piece at a corner of the
+        board
+        :param col:
+        :param row:
+        :param enemy:
+        :return:
+        """
+        # Check for both horizontal and vertical elimination
+        if self.check_horiz_elim(enemy, col, row):
+            self.board[col][row] = '-'
+        elif self.check_vert_elim(enemy, col, row):
+            self.board[col][row] = '-'
+
+    def eliminate_piece(self, col, row, enemy):
+        """
+        Checks if the piece at col, row can eliminate any other pieces and once
+        those are eliminated proceeds to check if the piece itself will be
+        eliminated by the surrounding enemy pieces
+        :param col:
+        :param row:
+        :param enemy:
+        :return:
+        """
+        # Get the character representing this piece
+        if enemy == '@':
+            piece = 'O'
+        else:
+            piece = '@'
+
+        # List that stores the different adjacent squares to check enemy pieces
+        # for elimination.
+        # In order, [left_square, right_square, up_square, down_square]
+        adj_squares = [(col-1, row), (col+1, row), (col, row-1), (col, row-1)]
+
+        for target_col, target_row in adj_squares:
+            # Check coords are valid
+            if self.min_col <= target_col <= self.max_col and \
+               self.min_row <= target_row <= self.max_col:
+                if self.board[target_col][target_row] == enemy:
+                    # From the enemy pieces perspective, so see if our pieces
+                    # can eliminate it
+                    self.__surround_elim__(target_col, target_row, piece)
+
+        # Now check if this piece can still be eliminated by the surrounding
+        # pieces
+        self.__surround_elim__(col, row, enemy)
+
+    def static_eliminate_piece(self):
         """
         This function checks if a board state eliminates any pieces and
-        removes eliminated pieces appropriately
+        removes eliminated pieces appropriately. ONLY USE THIS FUNCTION FOR
+        MASSACRE. WILL NOT WORK CORRECTLY FOR A REAL TIME GAME OF WATCH YOUR
+        BACK!
         :return: None
         """
         # For all white pieces, then black pieces
