@@ -48,7 +48,7 @@ class Player:
         self.total_turns += 1
         # Placing phase continues until we reach our 13th action
         if self.total_turns <= self.TOTAL_PIECES:
-            action = do_random_place(self.board, self.enemy)
+            action = centre_place_strat(self.board, self.enemy)
             self.board.modify(action, self.enemy)
         else:
             action = do_random_move(self.board, self.enemy)

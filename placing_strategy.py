@@ -87,7 +87,7 @@ def find_tiles_of_rank(rank):
                  ([(2, 2), (2, 3), (2, 4), (2, 5), (3, 2), (3, 5), (4, 2), (4, 5), (5, 2), (5, 3), (5, 4), (5, 5)]),
                  ([(3, 3), (3, 4), (4, 3), (4, 4)])]
 
-    return tile_rank[rank][1]
+    return tile_rank[rank]
     #
     # tile_ranking_dictionary = {
     #     0: 1,
@@ -107,3 +107,10 @@ def find_tiles_of_rank(rank):
     # return tuples
 
 
+def centre_place_strat(board_state, enemy):
+    for x in range(3, 0, -1):
+        tile_list = find_tiles_of_rank(x)
+        for tile in tile_list:
+            if board_state.output_piece(tile[0], tile[1]) == '-':
+                action = Action(board_state, enemy, action=(tile[0], tile[1]))
+                return action
