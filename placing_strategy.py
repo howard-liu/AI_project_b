@@ -38,42 +38,6 @@ def do_random_place(board_state, enemy):
         return action
 
 
-def first_move(board_state, enemy):
-    """
-    First move strategy as a test/baseline of a centre-focused strat
-    :param board_state: The current state of the board
-    :param enemy: Character representing the enemy piece
-    :return: An action or None if it is forfeited action
-    """
-    # Centre pieces are (3,3),(3,4),(4,3),(4,4)
-    if board_state.output_piece(3, 4) == enemy:
-        col = 4
-        row = 3
-    elif board_state.output_piece(4, 3) == enemy:
-        col = 3
-        row = 4
-    else:
-        if board_state.output_piece(3, 3) == '-':
-            row = 3
-            col = 3
-        elif board_state.output_piece(3, 4) == '-':
-            row = 3
-            col = 4
-        elif board_state.output_piece(4, 3) == '-':
-            row = 4
-            col = 3
-        elif board_state.output_piece(4, 4) == '-':
-            row = 4
-            col = 4
-    action = Action(board_state, enemy, action=(col, row))
-    return action
-
-# def second_move(board_state, enemy):
-    # First check if can immediately kill a piece
-    # If not find a centre piece which does not commit suicide
-
-
-# Enter in a rank (between 0 to 3) and it will give out list of tuples
 def find_tiles_of_rank(rank):
     """
     Enter in rank (0-3) (3 is centre) and it will spit out a list of tuples that are in that rank
@@ -88,29 +52,65 @@ def find_tiles_of_rank(rank):
                  ([(3, 3), (3, 4), (4, 3), (4, 4)])]
 
     return tile_rank[rank]
-    #
-    # tile_ranking_dictionary = {
-    #     0: 1,
-    #     1: 2,
-    #     2: 3,
-    #     3: 4,
-    #     4: 4,
-    #     5: 3,
-    #     6: 2,
-    #     7: 1
-    # }
-    # tuples = []
-    # for x in range(7):
-    #     for y in range(7):
-    #         if min(tile_ranking_dictionary[x], tile_ranking_dictionary[y]) == rank:
-    #             tuples.append((x, y))
-    # return tuples
+
+# <Helper functions for blacklist_bad_tiles() that are sort of duplicated and can be moved if there is time>
 
 
-def centre_place_strat(board_state, enemy):
+def look_up(col, row):
+    return col, row - 1
+
+
+def look_down(col, row):
+    return col, row + 1
+
+
+def look_left(col, row):
+    return col - 1, row
+
+
+def look_right(col, row):
+    return col + 1, row
+
+# </Helper functions for blacklist_bad_tiles() that are sort of duplicated and can be moved if there is time>
+
+
+# TODO
+# Except for possible to take pieces
+def blacklist_bad_tiles(board_state, enemy):
+    """
+    Checks up, down, left, right of all enemy tiles to give a list of 'blacklisted' tiles
+    :param board_state: The current state of the board
+    :param enemy: Character representing the enemy piece
+    :return: List of tuples that should not be placed
+    """
+    enemy_tiles = board_state.search_board(enemy)
+    tile_list = []
+    for enemy_tile in enemy_tiles:
+        tile_list.append(look_down(enemy_tile[0], enemy_tile[1]))
+        tile_list.append(look_up(enemy_tile[0], enemy_tile[1]))
+        tile_list.append(look_left(enemy_tile[0], enemy_tile[1]))
+        tile_list.append(look_right(enemy_tile[0], enemy_tile[1]))
+
+
+def centre_place_strategy(board_state, enemy):
+    """
+    Simple blind strategy that places pieces from the centre
+    :param board_state: The current state of the board
+    :param enemy: Character representing the enemy piece
+    :return: An action
+    """
     for x in range(3, 0, -1):
         tile_list = find_tiles_of_rank(x)
-        for tile in tile_list:
-            if board_state.output_piece(tile[0], tile[1]) == '-':
-                action = Action(board_state, enemy, action=(tile[0], tile[1]))
+        r = list(range(len(tile_list)))
+        random.shuffle(r)
+        for y in r:
+            if board_state.output_piece(tile_list[y][0], tile_list[y][1]) == '-':
+                action = Action(board_state, enemy, action=(tile_list[y][0], tile_list[y][1]))
                 return action
+
+        # while len(tile_list) > 0:
+        #     tile = random.choice(tile_list)
+        #     if board_state.output_piece(tile[0], tile[1]) == '-':
+        #         action = Action(board_state, enemy, action=(tile[0], tile[1]))
+        #         return action
+
