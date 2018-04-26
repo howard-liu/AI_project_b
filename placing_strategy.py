@@ -90,8 +90,19 @@ def blacklist_bad_tiles(board_state, enemy):
         tile_list.append(look_up(enemy_tile[0], enemy_tile[1]))
         tile_list.append(look_left(enemy_tile[0], enemy_tile[1]))
         tile_list.append(look_right(enemy_tile[0], enemy_tile[1]))
+    return tile_list
 
- 
+
+def blacklist_finder(black_listed_tiles, tile):
+    for z in black_listed_tiles:
+        print(tile)
+        print(z)
+        if tile == z:
+            print('Check')
+            return False
+    return True
+
+
 def centre_place_strategy(board_state, enemy):
     """
     Simple blind strategy that places pieces from the centre
@@ -105,12 +116,11 @@ def centre_place_strategy(board_state, enemy):
         random.shuffle(r)
         for y in r:
             if board_state.output_piece(tile_list[y][0], tile_list[y][1]) == '-':
-                action = Action(board_state, enemy, action=(tile_list[y][0], tile_list[y][1]))
-                return action
+                black_listed_tiles = blacklist_bad_tiles(board_state, enemy)
+                if blacklist_finder(black_listed_tiles, tile_list[y]):
+                    print('action to be: ' + str((tile_list[y][0], tile_list[y][1])))
+                    action = Action(board_state, enemy, action=(tile_list[y][0], tile_list[y][1]))
+                    print('action: ' + str(action))
+                    return action
 
-        # while len(tile_list) > 0:
-        #     tile = random.choice(tile_list)
-        #     if board_state.output_piece(tile[0], tile[1]) == '-':
-        #         action = Action(board_state, enemy, action=(tile[0], tile[1]))
-        #         return action
 
