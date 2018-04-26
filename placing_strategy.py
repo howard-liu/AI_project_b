@@ -95,10 +95,10 @@ def blacklist_bad_tiles(board_state, enemy):
 
 def blacklist_finder(black_listed_tiles, tile):
     for z in black_listed_tiles:
-        print(tile)
-        print(z)
+        # print(tile)
+        # print(z)
         if tile == z:
-            print('Check')
+            # print('Check')
             return False
     return True
 

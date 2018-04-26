@@ -33,8 +33,8 @@
       <file leaf-file-name="placing_strategy.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/placing_strategy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="316">
-              <caret line="120" column="83" selection-start-line="120" selection-start-column="83" selection-end-line="120" selection-end-column="83" />
+            <state relative-caret-position="181">
+              <caret line="98" column="10" selection-start-line="98" selection-start-column="10" selection-end-line="98" selection-end-column="10" />
               <folding>
                 <element signature="e#123#136#0" expanded="true" />
               </folding>
@@ -271,7 +271,14 @@
       <option name="project" value="LOCAL" />
       <updated>1524709555483</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Simple place strat: starts at centre, added random, added blacklist, error at widest ring">
+      <created>1524711470307</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1524711470307</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -314,7 +321,8 @@
     <MESSAGE value="Some strat planning 2" />
     <MESSAGE value="Simple place strat: starts at centre" />
     <MESSAGE value="Simple place strat: starts at centre, added random" />
-    <option name="LAST_COMMIT_MESSAGE" value="Simple place strat: starts at centre, added random" />
+    <MESSAGE value="Simple place strat: starts at centre, added random, added blacklist, error at widest ring" />
+    <option name="LAST_COMMIT_MESSAGE" value="Simple place strat: starts at centre, added random, added blacklist, error at widest ring" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/player.py">
@@ -415,8 +423,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/placing_strategy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="120" column="83" selection-start-line="120" selection-start-column="83" selection-end-line="120" selection-end-column="83" />
+        <state relative-caret-position="181">
+          <caret line="98" column="10" selection-start-line="98" selection-start-column="10" selection-end-line="98" selection-end-column="10" />
           <folding>
             <element signature="e#123#136#0" expanded="true" />
           </folding>
