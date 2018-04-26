@@ -38,7 +38,9 @@ class Move:
         if not self.__is_place__(board_state, col, row, new_col, new_row,
                                  enemy) and \
                 not self.__is_move__(board_state, col, row, new_col, new_row):
-            raise InvalidMoveError("Invalid Move detected...")
+            error = "Invalid Move detected, attempted: ({}, {}) -> ({}, {})".format(
+                self.curr_col, self.curr_row, self.new_col, self.new_row)
+            raise InvalidMoveError(error)
 
     def __eq__(self, other):
         """
@@ -165,16 +167,17 @@ class Move:
         """
         # Ensure that it's not at the very top of the board, and there is at
         # least 1 space to allow it to move upwards
-        if row != 0 and board_state.board[col][row - 1] == '-':
+        if row != board_state.min_row and board_state.board[col][row - 1] == '-':
             return col, row-1
         # Check that if there is a space and it is occupied by a black or white
         # piece that there is space to allow the current piece to jump
-        elif row != 0 and (
+        elif row != board_state.min_row and (
                     board_state.board[col][row - 1] == 'O' or
                     board_state.board[col][row - 1] == '@'):
             # Make sure its not on the second row of the board otherwise
             # there would be no more board left after you jumped over the piece
-            if row != 1 and board_state.board[col][row - 2] == '-':
+            if row != board_state.min_row + 1 and \
+                            board_state.board[col][row - 2] == '-':
                 return col, row-2
             else:
                 return False
@@ -194,17 +197,17 @@ class Move:
         """
         # Ensure that it's not at the very bottom of the board, and there is at
         # least 1 space to allow it to move downwards
-        if row != board_state.NUM_ROWS-1 and \
+        if row != board_state.max_row and \
                 board_state.board[col][row + 1] == '-':
             return col, row+1
         # Check that if there is a space and it is occupied by a black or white
         # piece that there is space to allow the current piece to jump
-        elif row != board_state.NUM_ROWS-1 and (
+        elif row != board_state.max_row and (
                         board_state.board[col][row + 1] == 'O' or
                         board_state.board[col][row + 1] == '@'):
             # Make sure its not on the second last row of the board otherwise
             # there would be no more board left after you jumped over the piece
-            if row != board_state.NUM_ROWS-2 and \
+            if row != board_state.max_row-1 and \
                       board_state.board[col][row + 2] == '-':
                 return col, row+2
             else:
@@ -225,16 +228,17 @@ class Move:
         """
         # Ensure that it's not at the very left of the board, and there is at
         # least 1 space to allow it to move left
-        if col != 0 and board_state.board[col - 1][row] == '-':
+        if col != board_state.min_col and board_state.board[col - 1][row] == '-':
             return col-1, row
         # Check that if there is a space and it is occupied by a black or white
         # piece that there is space to allow the current piece to jump
-        elif col != 0 and (
+        elif col != board_state.min_col and (
                         board_state.board[col - 1][row] == 'O' or
                         board_state.board[col - 1][row] == '@'):
             # Make sure its not on the second col of the board otherwise
             # there would be no more board left after you jumped left
-            if col != 1 and board_state.board[col - 2][row] == '-':
+            if col != board_state.min_col + 1 and \
+                            board_state.board[col - 2][row] == '-':
                 return col-2, row
             else:
                 return False
@@ -254,17 +258,17 @@ class Move:
         """
         # Ensure that it's not at the very right of the board, and there is at
         # least 1 space to allow it to move right
-        if col != board_state.NUM_COLS-1 and \
+        if col != board_state.max_col and \
                 board_state.board[col + 1][row] == '-':
             return col+1, row
         # Check that if there is a space and it is occupied by a black or white
         # piece that there is space to allow the current piece to jump
-        elif col != board_state.NUM_COLS-1 and (
+        elif col != board_state.max_col and (
                         board_state.board[col + 1][row] == 'O' or
                         board_state.board[col + 1][row] == '@'):
             # Make sure its not on the second last col of the board otherwise
             # there would be no more board left after you jumped right
-            if col != board_state.NUM_COLS-2 and \
+            if col != board_state.max_col-1 and \
                       board_state.board[col + 2][row] == '-':
                 return col+2, row
             else:
@@ -370,7 +374,7 @@ def check_piece(board_state, goal_tiles, col, row):
     """
 
     # Checking vertical
-    if row-1 >= 0 and row+1 <= board_state.NUM_ROWS-1:
+    if row-1 >= board_state.min_row and row+1 <= board_state.max_row:
         # Check the top side of the piece
         if board_state.board[col][row-1] == 'O' or \
            board_state.board[col][row-1] == 'X':
@@ -390,7 +394,7 @@ def check_piece(board_state, goal_tiles, col, row):
             goal_tiles.append((col, row+1))
 
     # Checking horizontal
-    if col-1 >= 0 and col+1 <= board_state.NUM_COLS-1:
+    if col-1 >= board_state.min_col and col+1 <= board_state.max_col:
         # Check left side of the piece
         if board_state.board[col-1][row] == 'O' or \
            board_state.board[col-1][row] == 'X':

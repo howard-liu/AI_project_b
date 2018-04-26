@@ -30,41 +30,49 @@ class Player:
         self.board = BoardState()
         # Counter to store the number of turns the player has done since the
         # start of the game
+        self.total_actions = 0
+        # Variable that syncs the number of turns given by referee
         self.total_turns = 0
+        # Variable to indicate which phase of the game we are in
+        self.phase = 'placing'
 
     def action(self, turns):
         """
         Method called by referee program to request an action from the player.
-        :param turns:
+        :param turns: Number of turns done so far in the current phase
         :return: A tuple if it is a placement action, a tuple of tuples if it is
                  a movement action and None if it is a forfeit action.
         """
-        # TODO
-        # Can't self.total_turns be replaced by turns (the input argument)?
-        # Not it can't be. self.total_turns counts how many times this player
-        # has made its move since the beginning of the game. turns only reports
-        # all of the turns that have been made for a current phase i.e. it resets
-        # to 0 when it reaches the movement phase
+        # Return the appropriate action depending on the phase
 
-        # Start off with a forfeited move and see if we can do anything
-        action = None
-        # Increment total turns every time this method is called
-        self.total_turns += 1
-        # Placing phase continues until we reach our 13th action
-        print(self.board)
-        if self.total_turns <= self.TOTAL_PIECES:
-            action = centre_place_strategy(self.board, self.enemy)
+        if self.phase == 'placing':
+            # action = centre_place_strategy(self.board, self.enemy)
+            action = do_random_place(self.board, self.enemy)
             self.board.modify(action, self.enemy)
         else:
+            # We enter the movement phase of the game
             action = do_random_move(self.board, self.enemy)
             self.board.modify(action, self.enemy)
-        # Consider the shrinking phases. Before the start of turns 128 and 192
-        # So on turn 126 or 127, 190 or 191 depending on the player.
-        # In actuality, using total_turns that is incremented the shrinking
-        # phases begin when total_turns = 12 + 64 = 76.
-        # Also when turns = 76 + 32 = 108
+
+        # Increment total actions since we have played yet another action
+        self.total_actions += 1
+        self.total_turns = turns
+        if self.phase == 'placing':
+            if self.total_actions == 12:
+                # Now switch to the moving phase
+                self.phase = 'moving'
+                # Reset turns
+                self.total_turns = 0
+        if self.phase == 'moving':
+            # Check if we have to shrink the board. Occurs at the end of turns
+            # 127 and 191.
+            if self.total_turns == 127:
+                self.board.shrink_board()
+            elif self.total_turns == 191:
+                self.board.shrink_board()
 
         if action is None:
+            # Then this is a forfeited action
             return action
         else:
             return action.return_action()
@@ -73,10 +81,20 @@ class Player:
         """
         Method is called by referee to update the player's internal board
         representation with the most recent move done by the opponent
-        :param action:
-        :return:
+        :param action: A tuple representing the type of action that the opponent
+                       did
+        :return: None
         """
-        # Placeholder to update the board from enemy perspective
+        # Increment to match the turns for the beginning of the next turn
+        self.total_turns += 1
+        #  Update the board from enemy perspective
         self.board.modify(Action(self.board, enemy=self.piece, action=action),
                           self.piece)
+        if self.phase == 'moving':
+            # Check if we have to shrink the board for this current turn
+            if self.total_turns == 127:
+                self.board.shrink_board()
+            elif self.total_turns == 191:
+                self.board.shrink_board()
+
         return None

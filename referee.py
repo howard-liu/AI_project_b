@@ -30,7 +30,12 @@ def main():
         if options.delay:
             time.sleep(options.delay)
         turns = game.turns
+        print("(Before Update) {} player: \n".format(player.player.piece) + str(player.player.board))
         action = player.action(turns)
+        print("Player plays move: " + str(action))
+        # print("Game turns = " + str(game.turns))
+        print("Total turns = " + str(player.player.total_turns))
+        print("(After Update) {} player: \n".format(player.player.piece) + str(player.player.board))
         try:
             game.update(action)
         except _InvalidActionException as e:
@@ -39,7 +44,13 @@ def main():
             print(f"invalid action ({game.loser}):", e)
             break
         print(game)
+        print()
+        print("(Before Update) {} player: \n".format(opponent.player.piece) + str(opponent.player.board))
+        print("Total turns = " + str(opponent.player.total_turns))
         opponent.update(action)
+        print("Total turns = " + str(opponent.player.total_turns))
+        print("(After Update) {} player: \n".format(opponent.player.piece) + str(opponent.player.board))
+        print("---------------NEW TURN---------------")
         # other player's turn!
         player, opponent = opponent, player
 

@@ -16,9 +16,6 @@ class NoBoardReadError(Exception):
 
 class BoardState:
 
-    NUM_COLS = 8
-    NUM_ROWS = 8
-
     def __init__(self, ins_type='N', other_state=None):
         """
         Constructor to initialise and fill in the current board state
@@ -137,6 +134,7 @@ class BoardState:
             for i in range(len(self.board)):
                 for j in range(len(self.board)):
                     if self.board[j][i] != other.board[j][i]:
+                        print("Difference found at {}".format(str((j, i))))
                         return False
             # Otherwise they must be the same state
             return True
@@ -164,9 +162,10 @@ class BoardState:
             # Must be searching for black player's pieces which are '@' chars
             piece_char = '@'
 
-        # Looping across entire board and then adding to the output
-        for i in range(self.max_row + 1):
-            for j in range(self.max_col + 1):
+        # Looping across the legal area of the board and then adding the found
+        # pieces to the output
+        for i in range(self.min_row, self.max_row + 1):
+            for j in range(self.min_col, self.max_col + 1):
                 if self.board[j][i] == piece_char:
                     output.append((j, i))
 
@@ -241,7 +240,7 @@ class BoardState:
     def __place_piece__(self, move, piece):
         """
         This function adds a piece to the board during the placing phase.
-        :param move:
+        :param move: A Move object containing the placement location
         :param piece: A character representing the player or enemies piece to be
                       added.
         :return: None
@@ -273,11 +272,12 @@ class BoardState:
                        the board. i.e. 'O' for white and '@' for black
         :param col: Column number of piece to check
         :param row: Row number of piece to check
-        :return: None
+        :return: Returns true if the piece being checked will be destroyed and
+                 False otherwise
         """
         # Only check left and right if the piece is not at the very edge
         # of the board
-        if col != self.min_col and col != self.max_col:
+        if self.min_col < col < self.max_col:
             # Check if both right and left sides are blocked by a corner or
             # a enemy piece
             if self.board[col + 1][row] == enemy and \
@@ -303,7 +303,7 @@ class BoardState:
         """
         # Only check up and down if the piece is not at the very edge
         # of the board
-        if row != self.min_row and row != self.max_row:
+        if self.min_row < row < self.max_row:
             # Check if both up and down sides are blocked by a corner or a
             # enemy piece
             if self.board[col][row + 1] == enemy and \
@@ -322,10 +322,12 @@ class BoardState:
         This function eliminates the piece at col, row if it has been surrounded
         by an enemy piece or is blocked in by an enemy piece at a corner of the
         board
-        :param col:
-        :param row:
-        :param enemy:
-        :return:
+        :param col: Col value of the piece to check if the enemy has surrounded
+                    it
+        :param row: Row value of the piece to check if the enemy has surrounded
+                    it
+        :param enemy: A character representing the enemy piece
+        :return: None
         """
         # Check for both horizontal and vertical elimination
         if self.check_horiz_elim(enemy, col, row):
@@ -333,15 +335,19 @@ class BoardState:
         elif self.check_vert_elim(enemy, col, row):
             self.board[col][row] = '-'
 
+        return None
+
     def eliminate_piece(self, col, row, enemy):
         """
         Checks if the piece at col, row can eliminate any other pieces and once
         those are eliminated proceeds to check if the piece itself will be
         eliminated by the surrounding enemy pieces
-        :param col:
-        :param row:
-        :param enemy:
-        :return:
+        :param col: Col value of piece to check if it eliminates any enemies or
+                    if it is eliminated by the enemy
+        :param row: Row value of piece to check if it eliminates any enemies or
+                    if it is eliminated by the enemy
+        :param enemy: A character representing the enemy piece
+        :return: None
         """
         # Get the character representing this piece
         if enemy == '@':
@@ -352,7 +358,7 @@ class BoardState:
         # List that stores the different adjacent squares to check enemy pieces
         # for elimination.
         # In order, [left_square, right_square, up_square, down_square]
-        adj_squares = [(col-1, row), (col+1, row), (col, row-1), (col, row-1)]
+        adj_squares = [(col-1, row), (col+1, row), (col, row-1), (col, row+1)]
 
         for target_col, target_row in adj_squares:
             # Check coords are valid
@@ -367,12 +373,15 @@ class BoardState:
         # pieces
         self.__surround_elim__(col, row, enemy)
 
+        return None
+
     def static_eliminate_piece(self):
         """
-        This function checks if a board state eliminates any pieces and
-        removes eliminated pieces appropriately. ONLY USE THIS FUNCTION FOR
-        MASSACRE. WILL NOT WORK CORRECTLY FOR A REAL TIME GAME OF WATCH YOUR
-        BACK!
+        This function ITERATIVELY checks if a board state eliminates any pieces
+        and removes eliminated pieces appropriately. ONLY USE THIS FUNCTION FOR
+        ELIMINATING PIECES IN BETWEEN TURNS. IT WILL NOT WORK CORRECTLY FOR A
+        REAL TIME GAME OF WATCH YOUR BACK! as it does not account for the order
+        in which the pieces are placed.
         :return: None
         """
         # For all white pieces, then black pieces
