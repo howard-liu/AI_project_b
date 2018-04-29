@@ -34,6 +34,7 @@ def do_random_move(board_state, enemy):
 
     return action
 
+
 # Copied from placing_strategy
 def find_tiles_of_rank(rank):
     """
@@ -125,6 +126,8 @@ def check_move_for_elimination(board_state, enemy, player, move):
     temp_board_state = BoardState(None, board_state)
     action = Action(board_state, enemy, action=None, move=move)
     temp_board_state.modify(action, enemy)
+    if enemy == 'O':
+        enemy = 'W'
     if len(temp_board_state.search_board(enemy)) == len(board_state.search_board(enemy)):
         return False
     return True
@@ -153,7 +156,7 @@ def check_easy_elimination(board_state, enemy, player):
     if len(poss_moves) != 0:
         for move in poss_moves:
             if check_move_for_elimination(board_state, enemy, player, move):
-                print('CHECK')
+                # print('CHECK')
                 action = Action(board_state, enemy, action=None, move=move)
                 break
         if action is None:

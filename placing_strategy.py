@@ -136,6 +136,8 @@ def blacklist_bad_tiles(board_state, enemy, player):
     :param enemy: Character representing the enemy piece
     :return: List of tuples that should not be placed
     """
+    if enemy == 'O':
+        enemy = 'W'
     enemy_tiles = board_state.search_board(enemy)
     tile_list = []
     for enemy_tile in enemy_tiles:
