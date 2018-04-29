@@ -51,14 +51,14 @@ def find_tiles_of_rank(rank):
     return tile_rank[rank]
 
 
-def move_towards_centre(board_state, col, row, enemy, possmoves):
+def move_towards_centre(board_state, col, row, enemy):
     """
     Outputs tuple, destination of moving a piece towards the centre
-    :param board_state:
-    :param col:
-    :param row:
-    :param enemy:
-    :return:
+    :param board_state: The current state of the board
+    :param col: Column of the piece we may be moving
+    :param row: Row of the piece we may be moving
+    :param enemy: Enemy piece
+    :return: Tuple of destination of move, or none if not found
     """
     new_row = row
     new_col = col
@@ -89,11 +89,13 @@ def move_towards_centre(board_state, col, row, enemy, possmoves):
 
 def move_to_centre_algorithm(board_state, enemy, player, possmoves):
     """
-
-    :param board_state:
-    :param enemy:
-    :param player:
-    :return:
+    An algorithm that moves pieces towards the centre, starting from the outermost area
+    This is strong because it means that we can stall until the board shrinks
+    And take advantage of opponent's stupid moves
+    :param board_state: The current state of the board
+    :param enemy: Character representing the enemy piece
+    :param player: Character representing the player piece
+    :return: An action
     """
     # Outside in
     for x in range(3):
@@ -102,7 +104,7 @@ def move_to_centre_algorithm(board_state, enemy, player, possmoves):
         # random.shuffle(r)
         for y in r:
             if board_state.output_piece(tile_list[y][0], tile_list[y][1]) == player:
-                destination = move_towards_centre(board_state, tile_list[y][0], tile_list[y][1], enemy, possmoves)
+                destination = move_towards_centre(board_state, tile_list[y][0], tile_list[y][1], enemy)
                 if destination is not None:
                     print(tile_list[y])
                     print(destination)
@@ -112,6 +114,14 @@ def move_to_centre_algorithm(board_state, enemy, player, possmoves):
 
 
 def check_move_for_elimination(board_state, enemy, player, move):
+    """
+    Tests a move to see whether it eliminates an enemy piece
+    :param board_state: The current state of the board
+    :param enemy: Character representing the enemy piece
+    :param player: Character representing the player piece
+    :param move: The move that is being tested
+    :return: Does it eliminate a piece? Boolean
+    """
     temp_board_state = BoardState(None, board_state)
     action = Action(board_state, enemy, action=None, move=move)
     temp_board_state.modify(action, enemy)
@@ -121,6 +131,16 @@ def check_move_for_elimination(board_state, enemy, player, move):
 
 
 def check_easy_elimination(board_state, enemy, player):
+    """
+    Simple strategy:
+    - Check for 1 move elimination
+    - Else, move pieces towards the centre from the outermost pieces
+    - Else, do a random move
+    :param board_state: The current state of the board
+    :param enemy: Character representing the enemy piece
+    :param player: Character representing the player piece
+    :return: An action
+    """
     # Get a list of all the current moves that the play could possibly make
     if enemy == '@':
         # If black is the enemy, then get poss_moves for white pieces

@@ -183,6 +183,7 @@ def centre_place_strategy(board_state, enemy, player):
     - Does not place at squares next to an enemy piece (enemy can take the next turn)
     :param board_state: The current state of the board
     :param enemy: Character representing the enemy piece
+    :param player: Character representing the player piece
     :return: An action
     """
     min_row = 0

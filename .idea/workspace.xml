@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="682de59d-397c-43b8-aca2-2b8ad53a73c7" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/enemy_player.py" beforeDir="false" afterPath="$PROJECT_DIR$/enemy_player.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/moving_strategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/moving_strategy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/placing_strategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/placing_strategy.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,8 +22,8 @@
       <file leaf-file-name="move.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/move.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="559" column="31" selection-start-line="559" selection-start-column="26" selection-end-line="559" selection-end-column="31" />
+            <state relative-caret-position="326">
+              <caret line="42" column="34" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -39,8 +40,8 @@
       <file leaf-file-name="player.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/player.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="236">
-              <caret line="54" column="14" selection-start-line="54" selection-start-column="14" selection-end-line="54" selection-end-column="14" />
+            <state relative-caret-position="51">
+              <caret line="60" column="31" lean-forward="true" selection-start-line="60" selection-start-column="31" selection-end-line="60" selection-end-column="31" />
               <folding>
                 <element signature="e#194#219#0" expanded="true" />
               </folding>
@@ -51,8 +52,8 @@
       <file leaf-file-name="enemy_player.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/enemy_player.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="53" column="59" lean-forward="true" selection-start-line="53" selection-start-column="59" selection-end-line="53" selection-end-column="59" />
+            <state relative-caret-position="215">
+              <caret line="55" column="49" selection-start-line="55" selection-start-column="49" selection-end-line="55" selection-end-column="49" />
               <folding>
                 <element signature="e#339#364#0" expanded="true" />
               </folding>
@@ -63,8 +64,8 @@
       <file leaf-file-name="placing_strategy.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/placing_strategy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-746">
-              <caret line="103" column="4" lean-forward="true" selection-start-line="103" selection-start-column="4" selection-end-line="103" selection-end-column="4" />
+            <state relative-caret-position="81">
+              <caret line="183" column="4" lean-forward="true" selection-start-line="183" selection-start-column="4" selection-end-line="186" selection-end-column="22" />
               <folding>
                 <element signature="e#123#136#0" expanded="true" />
               </folding>
@@ -75,8 +76,8 @@
       <file leaf-file-name="moving_strategy.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/moving_strategy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
-              <caret line="63" column="18" selection-start-line="63" selection-start-column="18" selection-end-line="63" selection-end-column="18" />
+            <state relative-caret-position="502">
+              <caret line="106" column="102" selection-start-line="106" selection-start-column="102" selection-end-line="106" selection-end-column="102" />
               <folding>
                 <element signature="e#149#162#0" expanded="true" />
               </folding>
@@ -84,11 +85,20 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="referee.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/referee.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="735">
+              <caret line="51" column="39" selection-start-line="51" selection-start-column="33" selection-end-line="51" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="board_state.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/board_state.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1562">
-              <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
+            <state relative-caret-position="256">
+              <caret line="133" column="26" selection-start-line="133" selection-start-column="24" selection-end-line="133" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -116,6 +126,9 @@
       <find>generate_</find>
       <find>Board</find>
       <find>blacklist_ba</find>
+      <find>posi</find>
+      <find>genera</find>
+      <find>player</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -135,11 +148,11 @@
         <option value="$PROJECT_DIR$/action.py" />
         <option value="$PROJECT_DIR$/test_b.py" />
         <option value="$PROJECT_DIR$/referee.py" />
-        <option value="$PROJECT_DIR$/enemy_player.py" />
         <option value="$PROJECT_DIR$/board_state.py" />
         <option value="$PROJECT_DIR$/move.py" />
-        <option value="$PROJECT_DIR$/placing_strategy.py" />
         <option value="$PROJECT_DIR$/player.py" />
+        <option value="$PROJECT_DIR$/enemy_player.py" />
+        <option value="$PROJECT_DIR$/placing_strategy.py" />
         <option value="$PROJECT_DIR$/moving_strategy.py" />
       </list>
     </option>
@@ -276,7 +289,21 @@
       <option name="project" value="LOCAL" />
       <updated>1524977483655</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Added greedy check for elimination for move">
+      <created>1524980161036</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1524980161036</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Added greedy check for elimination for move, added move to centre as priority">
+      <created>1524982992872</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1524982992872</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -330,7 +357,9 @@
     <MESSAGE value="Added board shrinkage function. Still need to fix elimination function" />
     <MESSAGE value="Fixed elimination function to now work properly for a real time game of &quot;Watch your Back!&quot;" />
     <MESSAGE value="Updated placing elimination detection and blacklisting" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated placing elimination detection and blacklisting" />
+    <MESSAGE value="Added greedy check for elimination for move" />
+    <MESSAGE value="Added greedy check for elimination for move, added move to centre as priority" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added greedy check for elimination for move, added move to centre as priority" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/move.py">
@@ -570,46 +599,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/player.py" />
     <entry file="file://$PROJECT_DIR$/player.py" />
-    <entry file="file://$PROJECT_DIR$/referee.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="50" column="66" selection-start-line="50" selection-start-column="66" selection-end-line="50" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test_b.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="585">
           <caret line="39" column="13" selection-start-line="39" selection-start-column="13" selection-end-line="39" selection-end-column="13" />
           <folding>
             <element signature="e#104#124#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/move.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="559" column="31" selection-start-line="559" selection-start-column="26" selection-end-line="559" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/enemy_player.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="53" column="59" lean-forward="true" selection-start-line="53" selection-start-column="59" selection-end-line="53" selection-end-column="59" />
-          <folding>
-            <element signature="e#339#364#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/placing_strategy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-746">
-          <caret line="103" column="4" lean-forward="true" selection-start-line="103" selection-start-column="4" selection-end-line="103" selection-end-column="4" />
-          <folding>
-            <element signature="e#123#136#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -621,27 +616,61 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/board_state.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="133" column="26" selection-start-line="133" selection-start-column="24" selection-end-line="133" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/move.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="326">
+          <caret line="42" column="34" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/referee.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="735">
+          <caret line="51" column="39" selection-start-line="51" selection-start-column="33" selection-end-line="51" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/player.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="236">
-          <caret line="54" column="14" selection-start-line="54" selection-start-column="14" selection-end-line="54" selection-end-column="14" />
+        <state relative-caret-position="51">
+          <caret line="60" column="31" lean-forward="true" selection-start-line="60" selection-start-column="31" selection-end-line="60" selection-end-column="31" />
           <folding>
             <element signature="e#194#219#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/board_state.py">
+    <entry file="file://$PROJECT_DIR$/enemy_player.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1562">
-          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
+        <state relative-caret-position="215">
+          <caret line="55" column="49" selection-start-line="55" selection-start-column="49" selection-end-line="55" selection-end-column="49" />
+          <folding>
+            <element signature="e#339#364#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/placing_strategy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="81">
+          <caret line="183" column="4" lean-forward="true" selection-start-line="183" selection-start-column="4" selection-end-line="186" selection-end-column="22" />
+          <folding>
+            <element signature="e#123#136#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/moving_strategy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="63" column="18" selection-start-line="63" selection-start-column="18" selection-end-line="63" selection-end-column="18" />
+        <state relative-caret-position="502">
+          <caret line="106" column="102" selection-start-line="106" selection-start-column="102" selection-end-line="106" selection-end-column="102" />
           <folding>
             <element signature="e#149#162#0" expanded="true" />
           </folding>
