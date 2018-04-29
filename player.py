@@ -46,8 +46,8 @@ class Player:
         # Return the appropriate action depending on the phase
 
         if self.phase == 'placing':
-            # action = centre_place_strategy(self.board, self.enemy)
-            action = do_random_place(self.board, self.enemy)
+            action = centre_place_strategy(self.board, self.enemy, self.piece)
+            # action = do_random_place(self.board, self.enemy)
             self.board.modify(action, self.enemy)
         else:
             # We enter the movement phase of the game

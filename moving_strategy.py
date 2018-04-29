@@ -32,3 +32,4 @@ def do_random_move(board_state, enemy):
         action = None
 
     return action
+
