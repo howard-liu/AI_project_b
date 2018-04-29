@@ -51,7 +51,8 @@ class Player:
             self.board.modify(action, self.enemy)
         else:
             # We enter the movement phase of the game
-            action = do_random_move(self.board, self.enemy)
+            action = check_easy_elimination(self.board, self.enemy, self.piece)
+            # action = do_random_move(self.board, self.enemy)
             self.board.modify(action, self.enemy)
 
         # Increment total actions since we have played yet another action

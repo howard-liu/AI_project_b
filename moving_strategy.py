@@ -6,6 +6,7 @@
 import random
 from action import *
 from move import generate_moves
+from board_state import *
 
 
 def do_random_move(board_state, enemy):
@@ -33,3 +34,37 @@ def do_random_move(board_state, enemy):
 
     return action
 
+
+def check_move_for_elimination(board_state, enemy, player, move):
+    temp_board_state = BoardState(None, board_state)
+    action = Action(board_state, enemy, action=None, move=move)
+    temp_board_state.modify(action, enemy)
+    if len(temp_board_state.search_board(enemy)) == len(board_state.search_board(enemy)):
+        # print('Lalalalalalalalalalalalalalalalalalalala')
+        return False
+    # print('YOOYOYOYOYOYOYOYOYOYOYOYOYOYOYOYOYOYOYOYOYO')
+    return True
+
+
+def check_easy_elimination(board_state, enemy, player):
+    # Get a list of all the current moves that the play could possibly make
+    if enemy == '@':
+        # If black is the enemy, then get poss_moves for white pieces
+        poss_moves = generate_moves(board_state, 'W')
+    else:
+        # White is the enemy
+        poss_moves = generate_moves(board_state, 'B')
+
+    move = poss_moves[random.randint(0, len(poss_moves)-1)]
+    action = Action(board_state, enemy, action=None, move=move)
+
+    if len(poss_moves) != 0:
+        for move in poss_moves:
+            if check_move_for_elimination(board_state, enemy, player, move):
+                # print('CHECK')
+                action = Action(board_state, enemy, action=None, move=move)
+                break
+    else:
+        action = None
+
+    return action
