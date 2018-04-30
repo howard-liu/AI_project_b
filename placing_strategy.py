@@ -162,12 +162,12 @@ def blacklist_bad_tiles(board_state, enemy, player):
     return tile_list
 
 
-def blacklist_finder(list_of_tiles, tile):
+def is_in_list(list_of_tiles, tile):
     """
     Compares a tile against a list of tiles
-    :param list_of_tiles:
-    :param tile:
-    :return:
+    :param list_of_tiles: A list of tiles (blacklist)
+    :param tile: A tile to compare with
+    :return: Whether the tile is in the list of (blacklisted) tiles
     """
     for z in list_of_tiles:
         # print(tile)
@@ -211,7 +211,7 @@ def centre_place_strategy(board_state, enemy, player):
         for y in r:
             if board_state.output_piece(tile_list[y][0], tile_list[y][1]) == '-':
                 black_listed_tiles = blacklist_bad_tiles(board_state, enemy, player)
-                if blacklist_finder(black_listed_tiles, tile_list[y]):
+                if is_in_list(black_listed_tiles, tile_list[y]):
                     # For testing (DELETE WHEN RESOLVED)
                     print('action to be: ' + str((tile_list[y][0], tile_list[y][1])))
                     action = Action(board_state, enemy, action=(tile_list[y][0], tile_list[y][1]))
