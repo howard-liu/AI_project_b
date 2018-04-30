@@ -231,11 +231,12 @@ class BoardState:
         self.min_row += 1
         self.max_row -= 1
 
-        # Add the new corners and eliminate the pieces on the board
+        # Add the new corners and eliminate the pieces around corners
         for corner in [(s, s), (s, 7-s), (7-s, 7-s), (7-s, s)]:
             row, col = corner
             self.board[col][row] = 'X'
-        self.static_eliminate_piece()
+            self.eliminate_piece(col, row, enemy='@')
+            self.eliminate_piece(col, row, enemy='O')
 
     def __place_piece__(self, move, piece):
         """
@@ -290,6 +291,10 @@ class BoardState:
             elif self.board[col + 1][row] == 'X' and \
                     self.board[col - 1][row] == enemy:
                 return True
+        else:
+            # If the piece is at the very left or right of the board it is not
+            # possible to eliminate it horizontally
+            return False
 
     def check_vert_elim(self, enemy, col, row):
         """
@@ -316,6 +321,10 @@ class BoardState:
             elif self.board[col][row + 1] == 'X' and \
                     self.board[col][row - 1] == enemy:
                 return True
+        else:
+            # If the piece is at the very top or very bottom of the board,
+            # it is not possible to eliminate it vertically.
+            return False
 
     def __surround_elim__(self, col, row, enemy):
         """
@@ -334,6 +343,20 @@ class BoardState:
             self.board[col][row] = '-'
         elif self.check_vert_elim(enemy, col, row):
             self.board[col][row] = '-'
+
+        return None
+
+    def __corner_elim__(self, col, row):
+        """
+        Function that performs elimination of pieces that are around corners
+        just after the board has been shrunk
+        :param col: Column number the corner is in
+        :param row: Row number the corner is in
+        :return: None
+        """
+        # List containing the squares that are adjacent to current corner even
+        # those that might not be legal
+        adj_squares = [(col-1, row), (col+1, row), (col, row-1), (col, row+1)]
 
         return None
 
@@ -378,10 +401,10 @@ class BoardState:
     def static_eliminate_piece(self):
         """
         This function ITERATIVELY checks if a board state eliminates any pieces
-        and removes eliminated pieces appropriately. ONLY USE THIS FUNCTION FOR
-        ELIMINATING PIECES IN BETWEEN TURNS. IT WILL NOT WORK CORRECTLY FOR A
-        REAL TIME GAME OF WATCH YOUR BACK! as it does not account for the order
-        in which the pieces are placed.
+        and removes eliminated pieces appropriately. IT WILL NOT WORK CORRECTLY
+        FOR A REAL TIME GAME OF WATCH YOUR BACK! as it does not account for the
+        order in which the pieces are placed. The elimination order is biased
+        towards black piece being eliminated first
         :return: None
         """
         # For all white pieces, then black pieces
