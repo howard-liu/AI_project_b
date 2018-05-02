@@ -200,11 +200,11 @@ class BoardState:
             return
         elif action.move_type == 'place':
             self.__place_piece__(action.move, piece)
-            self.eliminate_piece(action.move.curr_col, action.move.curr_row, enemy)
+            self.eliminate_piece(action.move.curr_col, action.move.curr_row)
         elif action.move_type == 'move':
             # The move must have been a movement one.
             self.__move_piece__(action.move)
-            self.eliminate_piece(action.move.new_col, action.move.new_row, enemy)
+            self.eliminate_piece(action.move.new_col, action.move.new_row)
 
     def shrink_board(self):
         """
@@ -233,10 +233,9 @@ class BoardState:
 
         # Add the new corners and eliminate the pieces around corners
         for corner in [(s, s), (s, 7-s), (7-s, 7-s), (7-s, s)]:
-            row, col = corner
+            col, row = corner
             self.board[col][row] = 'X'
-            self.eliminate_piece(col, row, enemy='@')
-            self.eliminate_piece(col, row, enemy='O')
+            self.eliminate_piece(col, row)
 
     def __place_piece__(self, move, piece):
         """
@@ -269,8 +268,8 @@ class BoardState:
     def check_horiz_elim(self, enemy, col, row):
         """
         Function that checks for horizontal eliminations.
-        :param enemy: A character corresponding to the enemy's piece on
-                       the board. i.e. 'O' for white and '@' for black
+        :param enemy: A tuple of character(s) corresponding to the enemy's piece
+                      on the board. i.e. 'O' for white and '@' for black
         :param col: Column number of piece to check
         :param row: Row number of piece to check
         :return: Returns true if the piece being checked will be destroyed and
@@ -281,15 +280,15 @@ class BoardState:
         if self.min_col < col < self.max_col:
             # Check if both right and left sides are blocked by a corner or
             # a enemy piece
-            if self.board[col + 1][row] == enemy and \
-                            self.board[col - 1][row] == enemy:
+            if self.board[col + 1][row] in enemy and \
+                            self.board[col - 1][row] in enemy:
                 # Then the piece gets destroyed
                 return True
-            elif self.board[col + 1][row] == enemy and \
+            elif self.board[col + 1][row] in enemy and \
                     self.board[col - 1][row] == 'X':
                 return True
             elif self.board[col + 1][row] == 'X' and \
-                    self.board[col - 1][row] == enemy:
+                    self.board[col - 1][row] in enemy:
                 return True
         else:
             # If the piece is at the very left or right of the board it is not
@@ -299,8 +298,8 @@ class BoardState:
     def check_vert_elim(self, enemy, col, row):
         """
         Function that checks for vertical eliminations.
-        :param enemy: A character corresponding to the enemy's piece on
-                       the board. i.e. 'O' for white and '@' for black
+        :param enemy: A tuple of character(s) corresponding to the enemy's piece
+                      on the board. i.e. 'O' for white and '@' for black
         :param col: Column number of piece to check
         :param row: Row number of piece to check
         :return: Returns true if the piece being checked will be destroyed and
@@ -311,22 +310,22 @@ class BoardState:
         if self.min_row < row < self.max_row:
             # Check if both up and down sides are blocked by a corner or a
             # enemy piece
-            if self.board[col][row + 1] == enemy and \
-               self.board[col][row - 1] == enemy:
+            if self.board[col][row + 1] in enemy and \
+               self.board[col][row - 1] in enemy:
                 # Then the piece gets destroyed
                 return True
-            elif self.board[col][row + 1] == enemy and \
+            elif self.board[col][row + 1] in enemy and \
                     self.board[col][row - 1] == 'X':
                 return True
             elif self.board[col][row + 1] == 'X' and \
-                    self.board[col][row - 1] == enemy:
+                    self.board[col][row - 1] in enemy:
                 return True
         else:
             # If the piece is at the very top or very bottom of the board,
             # it is not possible to eliminate it vertically.
             return False
 
-    def __surround_elim__(self, col, row, enemy):
+    def __surround_elim__(self, col, row):
         """
         This function eliminates the piece at col, row if it has been surrounded
         by an enemy piece or is blocked in by an enemy piece at a corner of the
@@ -338,6 +337,7 @@ class BoardState:
         :param enemy: A character representing the enemy piece
         :return: None
         """
+        enemy = self.__get_enemies__(self.board[col][row])
         # Check for both horizontal and vertical elimination
         if self.check_horiz_elim(enemy, col, row):
             self.board[col][row] = '-'
@@ -346,21 +346,22 @@ class BoardState:
 
         return None
 
-    def __corner_elim__(self, col, row):
+    @classmethod
+    def __get_enemies__(cls, piece):
         """
-        Function that performs elimination of pieces that are around corners
-        just after the board has been shrunk
-        :param col: Column number the corner is in
-        :param row: Row number the corner is in
-        :return: None
+        This function returns a set containing the characters which represent
+        the enemies of the input piece
+        :param piece: A character representing a player's piece
+        :return: A set of characters representing the enemy pieces
         """
-        # List containing the squares that are adjacent to current corner even
-        # those that might not be legal
-        adj_squares = [(col-1, row), (col+1, row), (col, row-1), (col, row+1)]
+        if piece == '@':
+            return {'O', 'X'}
+        elif piece == 'O':
+            return {'@', 'X'}
+        else:
+            return set()
 
-        return None
-
-    def eliminate_piece(self, col, row, enemy):
+    def eliminate_piece(self, col, row):
         """
         Checks if the piece at col, row can eliminate any other pieces and once
         those are eliminated proceeds to check if the piece itself will be
@@ -372,29 +373,33 @@ class BoardState:
         :param enemy: A character representing the enemy piece
         :return: None
         """
-        # Get the character representing this piece
-        if enemy == '@':
-            piece = 'O'
+        # Get the target of the current piece
+        piece = self.board[col][row]
+        if piece == '@':
+            target = tuple('O')
+        elif piece == 'O':
+            target = tuple('@')
         else:
-            piece = '@'
+            # It is a corner
+            target = ('@', 'O')
 
         # List that stores the different adjacent squares to check enemy pieces
         # for elimination.
-        # In order, [left_square, right_square, up_square, down_square]
-        adj_squares = [(col-1, row), (col+1, row), (col, row-1), (col, row+1)]
+        # In order, [left_square, right_square, down_square, up_square]
+        adj_squares = [(col-1, row), (col+1, row), (col, row+1), (col, row-1)]
 
         for target_col, target_row in adj_squares:
             # Check coords are valid
             if self.min_col <= target_col <= self.max_col and \
                self.min_row <= target_row <= self.max_col:
-                if self.board[target_col][target_row] == enemy:
+                if self.board[target_col][target_row] in target:
                     # From the enemy pieces perspective, so see if our pieces
                     # can eliminate it
-                    self.__surround_elim__(target_col, target_row, piece)
+                    self.__surround_elim__(target_col, target_row)
 
         # Now check if this piece can still be eliminated by the surrounding
         # pieces
-        self.__surround_elim__(col, row, enemy)
+        self.__surround_elim__(col, row)
 
         return None
 

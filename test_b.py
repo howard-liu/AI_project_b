@@ -14,6 +14,17 @@ player = Player('white')
 enemy_player = ep.Player('black')
 board = BoardState()
 
+board.modify(Action(board, 'O', (3, 4)), 'O')
+board.modify(Action(board, '@', (4, 3)), '@')
+board.modify(Action(board, 'O', (5, 4)), 'O')
+board.modify(Action(board, '@', (5, 3)), '@')
+board.modify(Action(board, 'O', (4, 5)), 'O')
+print(board)
+board.shrink_board()
+print(board)
+board.shrink_board()
+print(board)
+
 # Placing Phase
 # for i in range(12):
 #     player_action = Action(board, '@', player.action(i))
