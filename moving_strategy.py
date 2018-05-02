@@ -107,8 +107,6 @@ def move_to_centre_algorithm(board_state, enemy, player, possmoves):
             if board_state.output_piece(tile_list[y][0], tile_list[y][1]) == player:
                 destination = move_towards_centre(board_state, tile_list[y][0], tile_list[y][1], enemy)
                 if destination is not None:
-                    print(tile_list[y])
-                    print(destination)
                     move = Move(board_state, tile_list[y][0], tile_list[y][1], destination[0], destination[1])
                     action = Action(board_state, enemy, action=None, move=move)
                     return action
@@ -133,7 +131,8 @@ def check_move_for_elimination(board_state, enemy, player, move):
     return True
 
 
-def check_easy_elimination(board_state, enemy, player):
+def check_easy_elimination(board_state, enemy, player ):
+    ''', move_list'''
     """
     Simple strategy:
     - Check for 1 move elimination
@@ -149,9 +148,12 @@ def check_easy_elimination(board_state, enemy, player):
         # If black is the enemy, then get poss_moves for white pieces
         poss_moves = generate_moves(board_state, 'W')
     else:
-        # White is the enemy
+        # White is the enemy, possible moves for white
         poss_moves = generate_moves(board_state, 'B')
     action = None
+
+    # Remove moves in list from poss_moves
+    # poss_moves = [x for x in poss_moves if x not in move_list]
 
     if len(poss_moves) != 0:
         for move in poss_moves:
@@ -169,4 +171,176 @@ def check_easy_elimination(board_state, enemy, player):
     else:
         action = None
 
-    return action
+    return action # , move
+
+
+def evalutate_this_move(board_state, enemy, player, move):
+    temp_board_state = BoardState(None, board_state)
+    action = Action(board_state, enemy, action=None, move=move)
+    temp_board_state.modify(action, enemy)
+    if enemy == 'O':
+        enemy = 'W'
+    return len(temp_board_state.search_board(player)) - len(board_state.search_board(enemy))
+
+
+def generate_move(board_state, enemy):
+    # Generate possible move
+    # Get a list of all the current moves that the play could possibly make
+    if enemy == '@':
+        # If black is the enemy, then get poss_moves for white pieces
+        poss_moves = generate_moves(board_state, 'W')
+    else:
+        # White is the enemy, possible moves for white
+        poss_moves = generate_moves(board_state, 'B')
+    return poss_moves
+
+#-----------------------------------------------------------------#
+'''
+                    CAREFUL: UNDER CONSTRUCTION
+                            ___
+                     /======/
+            ____    //      \___       ,/
+             | \\  //           :,   ./
+     |_______|__|_//            ;:; /
+    _L_____________\o           ;;;/
+____(CCCCCCCCCCCCCC)____________-/________________________________
+'''
+#-----------------------------------------------------------------#
+
+
+class BoardTree(object):
+    def __init__(self):
+        self.parent = None
+        self.first_child = None
+        self.next_sibling = None
+        self.board = None
+        self.action_taken = None
+
+
+def evaluate_depth(board_state, enemy, player, depth, breadth):
+    # Initialise root board state
+    root_board = BoardTree()
+    root_board.board = board_state
+
+    move_list = []
+    for x in range(depth):
+
+        temp_action, temp_move = check_easy_elimination(board_state, enemy, player, move_list)
+
+        next_board = BoardTree()
+        next_board.board = temp_board_state.modify(temp_action, enemy)
+
+        if root_board.first_child is None:
+            root_board.first_child = next_board
+            pass
+        else:
+            sibling = root_board.first_child
+            while sibling.next_sibling is not None:
+                sibling = sibling.next_sibling
+
+
+
+
+
+
+
+        poss_moves = generate_move(root_board.board, enemy)
+        if breadth > len(poss_moves):
+            evalutation_range = len(poss_moves)
+        else:
+            evalutation_range = breadth
+
+
+
+
+
+
+        for y in range(evalutation_range):
+            temp_action, temp_move = check_easy_elimination(board_state, enemy, player, move_list)
+
+            move_list.append(temp_move)
+
+            temp_board_state = BoardState(None, root_board)
+
+            next_board = BoardTree()
+            # ?
+            next_board.parent = root_board
+            if root_board.first_child is None:
+                next_board.first_child = temp_board_state.modify(temp_action, enemy)
+            else:
+                next_board.next_sibling = temp_board_state.modify(temp_action, enemy)
+
+    action_list = []
+    move_list = []
+    f_list = []
+    board_state_list = []
+
+    for x in range(depth):
+        action_list.append(x)
+        move_list.append(x)
+        f_list.append(x)
+        board_state_list.append(x)
+    max_f = 0
+    # Tree "output : input"
+    # For reverse traversal to find original input
+    search_tree_of_board = {}
+    key_count = 0
+
+    for x in range(depth):
+        poss_moves = generate_move(board_state, enemy)
+        if breadth > len(poss_moves):
+            evalutation_range = len(poss_moves)
+        else:
+            evalutation_range = breadth
+
+        action_list[x] = []
+        move_list[x] = []
+        f_list[x] = []
+        board_state_list[x] = []
+
+        for y in range(evalutation_range):
+            if x == 0:
+                temp_action, temp_move = check_easy_elimination(board_state, enemy, player, move_list)
+            else:
+                temp_action, temp_move = check_easy_elimination(
+                    search_tree_of_board.keys()[key_count], enemy, player, move_list)
+                key_count += 1
+
+            # This is inefficient
+            move_list[x].append(temp_move)
+            action_list[x].append(temp_action)
+
+            # Evaluation
+            temp_f = evalutate_this_move(list(search_tree_of_board.keys())[key_count], enemy, player, poss_moves[y])
+            f_list[x].append(temp_f)
+
+            # Store board states
+
+            temp_board_state = BoardState(None, board_state)
+            temp_board_state.modify(temp_action, enemy)
+            # Just in case?
+            board_error = False
+            for board in board_state_list:
+                if board is temp_board_state:
+                    board_error = True
+            if board_error is False:
+                if x == 0:
+                    search_tree_of_board[temp_board_state] = board_state, temp_action
+                else:
+                    search_tree_of_board[temp_board_state] = list(search_tree_of_board.keys())[key_count], temp_action
+
+            board_state_list[x].append(temp_board_state)
+
+    for x in range(len(f_list[len(f_list) - 1]) - 1, len(f_list[len(f_list) - 1]) - 1 - evalutation_range, -1):
+        if f_list[len(f_list) - 1][x] > max_f:
+            f_list[len(f_list) - 1][x] = max_f
+            f_index = x
+
+    traverse_board = list(search_tree_of_board.get(board_state_list[len(board_state_list) - 1]))[f_index]
+    while search_tree_of_board.get(traverse_board) is not None:
+        traverse_board = search_tree_of_board.get(traverse_board)
+
+    return traverse_board[1]
+
+
+

@@ -162,7 +162,7 @@ def blacklist_bad_tiles(board_state, enemy, player):
     return tile_list
 
 
-def is_in_list(list_of_tiles, tile):
+def is_not_in_list(list_of_tiles, tile):
     """
     Compares a tile against a list of tiles
     :param list_of_tiles: A list of tiles (blacklist)
@@ -198,9 +198,11 @@ def centre_place_strategy(board_state, enemy, player):
         min_row = 2
     kill_tile = priority_eliminate(board_state, enemy, player)
     if kill_tile is not None and min_row <= kill_tile[1] <= max_row:
+        # print('Killtile: ' + str(kill_tile[0]) + ',' + str(kill_tile[1]))
         action = Action(board_state, enemy, action=(kill_tile[0], kill_tile[1]))
         return action
     for x in range(3, 0, -1):
+        # print(x)
         temp_tile_list = find_tiles_of_rank(x)
         tile_list = []
         for tile in temp_tile_list:
@@ -211,12 +213,14 @@ def centre_place_strategy(board_state, enemy, player):
         for y in r:
             if board_state.output_piece(tile_list[y][0], tile_list[y][1]) == '-':
                 black_listed_tiles = blacklist_bad_tiles(board_state, enemy, player)
-                if is_in_list(black_listed_tiles, tile_list[y]):
+                if player == '@':
+                    print(black_listed_tiles)
+                if is_not_in_list(black_listed_tiles, tile_list[y]):
                     # For testing (DELETE WHEN RESOLVED)
-                    print('action to be: ' + str((tile_list[y][0], tile_list[y][1])))
+                    # print('action to be: ' + str((tile_list[y][0], tile_list[y][1])))
                     action = Action(board_state, enemy, action=(tile_list[y][0], tile_list[y][1]))
                     # For testing (DELETE WHEN RESOLVED)
-                    print('action: ' + str(action))
+                    # print('action: ' + str(action))
                     return action
 
 

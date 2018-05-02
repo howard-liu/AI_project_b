@@ -16,6 +16,11 @@ class Player:
     """
     # Each player has 12 pieces
     TOTAL_PIECES = 12
+    # Changeable:
+    # Search depth
+    DEPTH = 5
+    #Search breadth
+    MAX_BREADTH = 5
 
     def __init__(self, colour):
         # Assign the character representing enemy pieces depending on the player
@@ -51,12 +56,14 @@ class Player:
             self.board.modify(action, self.enemy)
         else:
             # We enter the movement phase of the game
+            # action = evaluate_depth(self.board, self.enemy, self.piece, self.DEPTH, self.MAX_BREADTH)
             action = check_easy_elimination(self.board, self.enemy, self.piece)
             # action = do_random_move(self.board, self.enemy)
             self.board.modify(action, self.enemy)
 
         # Increment total actions since we have played yet another action
         self.total_actions += 1
+        # Sync turns
         self.total_turns = turns
         if self.phase == 'placing':
             if self.total_actions == 12:
