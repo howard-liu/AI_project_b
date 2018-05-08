@@ -1,100 +1,17 @@
+COMP30024 AI "Watch your Back!" Player
+AI design by Edmond Pan and Howard Liu
+
 Program Structure
 
-parta.py:
-Driver file of the project. Calls functions from the rest of the project
-
-board_state.py:
-Describes the BoardState class. It handles:
-- Searching board for black/white pieces
-- Calling movement
-- Updating the board so pieces are eliminated
-
-move.py:
-Describes the Move class. It handles:
-- Checking if move is valid
-- Counting all possible moves given a board state
-- Checking if a move commits suicide
-- Matching white pieces to the closest tile that gets white closer to winning
-- Generating a sorted list of moves (children) from the current board state
-
-search_tree.py:
-Describes the MassacreProblem class. It handles:
-- Calling a move
-- Calling the generation of the next board state after the move
-- Checks if board is won
-Also describes the Node class, used by the search tree in MassacreProblem. It handles:
-- Creating its child node, generating a next possible move
-- Creating all of its child nodes
-- When a solution is found, returns the path it took to get there
-Also describes the Stack class, used to store the children of explored nodes. It handles:
-- Management of the stack (push, pop)
-- Size of stack
-
-search_algorithm.py:
-Contains the algorithms that we want to try for search
-- Iterative deepening search
-- Depth limited search
-- Depth first search (for testing)
-- Breadth first search (for testing)
-
-'Moves':
-Time complexity: O(board_width^2) + O(white_pieces) + O(black_pieces)
-Space complexity O(white_pieces) + O(black_pieces)
-
-'Massacre':
-Modelling problem as a search problem:
-
-Initial state:
-Initial board state, determined by reading from a text file describing the board state
-
-Actions:
-Moving a white piece one square up, down, left, or right
-
-Goal test:
-Implicit
-The goal test is that all black pieces are eliminated,
-but there are many possible board states that satisfy the goal test
-
-Path cost:
-Number of moves taken to eliminate all black pieces
-Where each move has a cost of 1
-
-Solution:
-Path taken to eliminate all black pieces
-
-Current Massacre Strategy:
-- Iteratively deepening search algorithm
-- Before moving, checks if new board state will be a unique board state
-- If so, add this state to the tree
-- For each white piece on the board
-    - Find a goal tile where a goal tile is any tile next to a black, especially a tile that kills the black piece
-- Generate the possible moves to kill the first black piece in this state
-    - Possible moves will not:
-        - Move to a place that can cause it to be eliminated
-    - Possible moves will:
-        - Minimise the distance between a white piece and a goal tile
-- Children are generated in a way that sorts them by shortest minimum distance to goal tile
-- Execute all of the possible moves and add them to the search tree
-
-
-Complexity:
-
-For a Iteratively deepening search tree:
-Time complexity: branching factor ^ depth of shallowest solution
-Space complexity: Depth of shallowest solution
-
-Branching factor = number of white pieces * 4 (i.e. The max number of legal moves possible) 
-                 = O(4n) where n is number of black pieces on the board
-
-Optimal?:
-Our algorithm is not optimal as it does not explore all branches to check for optimality. It
-will not always return the shortest path since we have assumed that the cost for a move to any
-board state is equal to 1. i.e. All moves are equally good when in reality they are not.
+AI Strategies/Design Approach
+- Split the game into its 2 major phases with different algorithms for deciding moves based on which phase the game was currently in
+- Strategies for placing phase
+    - Machine Learning for choosing optimal positions for placement with the scoring function to maximise player's while eliminating as many of
+      the enemies pieces as possible
+    - 
+- Movement phase also had algorithms to consider board shrinkage and its effect on pieces and corresponding strategies
 
 
 
 
-
-
-
-
+Additional Tools/Resources

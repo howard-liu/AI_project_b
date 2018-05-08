@@ -16,7 +16,7 @@ class NoBoardReadError(Exception):
 
 class BoardState:
 
-    def __init__(self, ins_type='N', other_state=None):
+    def __init__(self, ins_type='N', other_state=None, to_move='O'):
         """
         Constructor to initialise and fill in the current board state
         :param ins_type: Character determining which method to use to insert the
@@ -67,6 +67,7 @@ class BoardState:
                                    ' check the inputs')
         # Make sure any pieces that should be eliminated are eliminated
         self.static_eliminate_piece()
+
 
     def __read_input__(self):
         """
