@@ -135,7 +135,7 @@ class BoardState:
             for i in range(len(self.board)):
                 for j in range(len(self.board)):
                     if self.board[j][i] != other.board[j][i]:
-                        print("Difference found at {}".format(str((j, i))))
+                        # print("Difference found at {}".format(str((j, i))))
                         return False
             # Otherwise they must be the same state
             return True
@@ -155,7 +155,6 @@ class BoardState:
         :return: A list of tuples containing the coords (col, row) of the
                  player's pieces
         """
-        output = []
         if player == 'W':
             # If white player search for 'O' characters on the board
             piece_char = 'O'
@@ -163,11 +162,23 @@ class BoardState:
             # Must be searching for black player's pieces which are '@' chars
             piece_char = '@'
 
+        return self.search_board_char(piece_char)
+
+    def search_board_char(self, char):
+        """
+        This function searches the board for the locations of the corresponding
+        char
+        :param char: The character to search for
+        :return: A list of tuples containing the coordinates for all of the l
+                 locations on the board that contain that char
+        """
+        output = []
+
         # Looping across the legal area of the board and then adding the found
         # pieces to the output
         for i in range(self.min_row, self.max_row + 1):
             for j in range(self.min_col, self.max_col + 1):
-                if self.board[j][i] == piece_char:
+                if self.board[j][i] == char:
                     output.append((j, i))
 
         return output

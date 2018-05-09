@@ -9,10 +9,13 @@ from player import *
 import enemy_player as ep
 from placing_strategy import *
 from moving_strategy import *
+from watch_your_back import *
+from board_tree import *
 
 player = Player('white')
 enemy_player = ep.Player('black')
 board = BoardState()
+
 
 board.modify(Action(board, 'O', (3, 4)), 'O')
 board.modify(Action(board, '@', (4, 3)), '@')
@@ -20,10 +23,21 @@ board.modify(Action(board, 'O', (5, 4)), 'O')
 board.modify(Action(board, '@', (5, 3)), '@')
 board.modify(Action(board, 'O', (4, 5)), 'O')
 print(board)
-board.shrink_board()
-print(board)
-board.shrink_board()
-print(board)
+
+initial = GameState(to_move='O', utility=0, board_state=deepcopy(board),
+                    moves=generate_moves(board, 'W'))
+
+tree = BoardTree(initial)
+
+
+
+# wb = WatchYourBack(initial)
+# test_move = Move(board, col=4, row=5, new_col=5, new_row=5)
+# a = GameState(to_move='O', utility=wb.compute_eval(deepcopy(board), 'O'),
+#               board_state=deepcopy(board), moves=generate_moves(board, 'W'))
+# test_state = wb.result(a, test_move)
+# print(test_state.board_state)
+
 
 # Placing Phase
 # for i in range(12):
