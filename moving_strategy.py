@@ -209,12 +209,14 @@ ____(CCCCCCCCCCCCCC)____________-/________________________________
 
 
 class BoardTree(object):
-    def __init__(self):
+    def __init__(self, breadth):
         self.parent = None
         self.first_child = None
         self.next_sibling = None
         self.board = None
         self.action_taken = None
+        self.child = []
+
 
 
 def evaluate_depth(board_state, enemy, player, depth, breadth):

@@ -44,25 +44,25 @@ def do_random_place(board_state, enemy):
 # Shitty wrap fix
 def look_up(col, row):
     if row == 0:
-        return col, row # None
+        return None
     return col, row - 1
 
 
 def look_down(col, row):
     if row == 7:
-        return col, row
+        return None
     return col, row + 1
 
 
 def look_left(col, row):
     if col == 0:
-        return col, row
+        return None
     return col - 1, row
 
 
 def look_right(col, row):
     if col == 7:
-        return col, row
+        return None
     return col + 1, row
 
 # </Helper functions for blacklist_bad_tiles() that are sort of duplicated and can be moved if there is time>
@@ -158,7 +158,7 @@ def blacklist_bad_tiles(board_state, enemy, player):
             up_up = look_up(up[0], up[1])
         if left is not None:
             left_left = look_left(left[0], left[1])
-        if right_right is not None:
+        if right is not None:
             right_right = look_right(right[0], right[1])
 
         if down_down is not None:
@@ -192,6 +192,67 @@ def is_not_in_list(list_of_tiles, tile):
     return True
 
 
+def defend_piece(board_state, enemy, player):
+    enemy_list = []
+
+    for x in range(3, 0, -1):
+        tile_list = find_tiles_of_rank(x)
+        r = list(range(len(tile_list)))
+        for y in r:
+            if board_state.output_piece(tile_list[y][0], tile_list[y][1]) == enemy:
+                for tile in tile_list:
+                    enemy_list.append(tile)
+
+    for enemy_tile in enemy_list:
+        # print('ENEMY TILE: ' + str(enemy_tile))
+        down = look_down(enemy_tile[0], enemy_tile[1])
+        up = look_up(enemy_tile[0], enemy_tile[1])
+        left = look_left(enemy_tile[0], enemy_tile[1])
+        right = look_right(enemy_tile[0], enemy_tile[1])
+
+        if down is not None:
+            if board_state.output_piece(down[0], down[1]) == enemy:
+                down_two = look_down(down[0], down[1])
+                if down_two is not None:
+                    if board_state.output_piece(down_two[0], down_two[1]) == player:
+                        down_three = look_down(down_two[0], down_two[1])
+                        if down_three is not None:
+                            if board_state.output_piece(down_three[0], down_three[1]) == '-':
+                                return down_three[0], down_three[1]
+
+        if up is not None:
+            if board_state.output_piece(up[0], up[1]) == enemy:
+                up_two = look_up(up[0], up[1])
+                if up_two is not None:
+                    if board_state.output_piece(up_two[0], up_two[1]) == player:
+                        up_three = look_up(up_two[0], up_two[1])
+                        if up_three is not None:
+                            if board_state.output_piece(up_three[0], up_three[1]) == '-':
+                                return up_three[0], up_three[1]
+
+        if left is not None:
+            if board_state.output_piece(left[0], left[1]) == enemy:
+                left_two = look_left(left[0], left[1])
+                if left_two is not None:
+                    if board_state.output_piece(left_two[0], left_two[1]) == player:
+                        left_three = look_left(left_two[0], left_two[1])
+                        if left_three is not None:
+                            if board_state.output_piece(left_three[0], left_three[1]) == '-':
+                                return left_three[0], left_three[1]
+
+        if right is not None:
+            if board_state.output_piece(right[0], right[1]) == enemy:
+                right_two = look_right(right[0], right[1])
+                if right_two is not None:
+                    if board_state.output_piece(right_two[0], right_two[1]) == player:
+                        right_three = look_right(right_two[0], right_two[1])
+                        if right_three is not None:
+                            if board_state.output_piece(right_three[0], right_three[1]) == '-':
+                                return right_three[0], right_three[1]
+
+    return None
+
+
 def centre_place_strategy(board_state, enemy, player):
     """
     Simple strategy that prioritises centre tiles
@@ -215,8 +276,17 @@ def centre_place_strategy(board_state, enemy, player):
         # print('Killtile: ' + str(kill_tile[0]) + ',' + str(kill_tile[1]))
         action = Action(board_state, enemy, action=(kill_tile[0], kill_tile[1]))
         return action
+
+    black_listed_tiles = blacklist_bad_tiles(board_state, enemy, player)
+
+    def_move = defend_piece(board_state, enemy, player)
+    if def_move is not None and min_row <= def_move[1] <= max_row:
+        if is_not_in_list(black_listed_tiles, def_move):
+            action = Action(board_state, enemy, action=(def_move[0], def_move[1]))
+            print('ACTION: ' + str(def_move))
+            return action
+
     for x in range(3, 0, -1):
-        # print(x)
         temp_tile_list = find_tiles_of_rank(x)
         tile_list = []
         for tile in temp_tile_list:
@@ -226,18 +296,12 @@ def centre_place_strategy(board_state, enemy, player):
         random.shuffle(r)
         for y in r:
             if board_state.output_piece(tile_list[y][0], tile_list[y][1]) == '-':
-                black_listed_tiles = blacklist_bad_tiles(board_state, enemy, player)
-                # if player == '@':
-                #     print(black_listed_tiles)
+                # print(black_listed_tiles)
                 if is_not_in_list(black_listed_tiles, tile_list[y]):
-                    print(tile_list[y])
-                    # For testing (DELETE WHEN RESOLVED)
-                    # print('action to be: ' + str((tile_list[y][0], tile_list[y][1])))
                     action = Action(board_state, enemy, action=(tile_list[y][0], tile_list[y][1]))
-                    # For testing (DELETE WHEN RESOLVED)
-                    # print('action: ' + str(action))
                     if action is not None:
                         return action
-    return None
+
+    return do_random_place(board_state, enemy)
 
 
