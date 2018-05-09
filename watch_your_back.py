@@ -43,7 +43,22 @@ class WatchYourBack:
     def cutoff_test(self):
         return
 
-    def compute_eval(self):
+    def terminal_test(self):
+        return
+
+    def compute_eval(self, state):
+        """
+        This eval function can calculate a value using a few different ways
+            - Subtract the current number of our pieces with the number of enemy pieces on
+              the board. (This would be one feature)
+            - Use the distances to goal tiles as previously implemented with massacre
+            
+        :param state: 
+        :return: 
+        """
+
+        board = state.board_state
+
         return
 
 
