@@ -155,7 +155,7 @@ class BoardState:
         :return: A list of tuples containing the coords (col, row) of the
                  player's pieces
         """
-        if player == 'W':
+        if player == 'W' or player == 'O':
             # If white player search for 'O' characters on the board
             piece_char = 'O'
         else:

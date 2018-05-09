@@ -10,7 +10,8 @@ from move import generate_moves
 from action import *
 
 # This is namedtuple for quickly storing different attributes of a game state
-GameState = namedtuple('GameState', 'to_move, utility, board_state, moves')
+GameState = namedtuple('GameState', 'to_move, utility, board_state, moves, '
+                                    'turn_num')
 
 
 class WatchYourBack:
@@ -53,13 +54,26 @@ class WatchYourBack:
         # Now perform the action on the output_state
         output_board.modify(move_action, enemy)
 
+        # Check if we have to shrink the board. Occurs at the end of turns
+        # 127 and 191.
+        if state.turn_num == 127:
+            output_board.shrink_board()
+        elif state.turn_num == 191:
+            output_board.shrink_board()
+
         return GameState(to_move=enemy,
                          utility=self.compute_eval(output_board, enemy),
                          board_state=output_board,
-                         moves=generate_moves(output_board, enemy))
+                         moves=generate_moves(output_board, enemy),
+                         turn_num=state.turn_num + 1)
 
     def cutoff_test(self):
-        return
+        """
+        This function determines whether to stop an Alpha Beta search if it has
+        reached a certain condition. RIGHT NOW IT DOES NOTHING
+        :return:
+        """
+        return None
 
     def terminal_test(self, state):
         """
@@ -82,6 +96,15 @@ class WatchYourBack:
         else:
             # Otherwise not a terminal state
             return False
+
+    def to_move(self, state):
+        """
+        Return the player whose move it is in this state.
+        :param state: The GameState object to check
+        :return: A character corresponding to the player who will move for this
+                 game state
+        """
+        return state.to_move
 
     def compute_eval(self, state, to_move):
         """
