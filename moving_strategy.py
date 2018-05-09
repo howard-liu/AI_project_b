@@ -131,7 +131,7 @@ def check_move_for_elimination(board_state, enemy, player, move):
     return True
 
 
-def check_easy_elimination(board_state, enemy, player ):
+def check_easy_elimination(board_state, enemy, player):
     ''', move_list'''
     """
     Simple strategy:
@@ -171,7 +171,7 @@ def check_easy_elimination(board_state, enemy, player ):
     else:
         action = None
 
-    return action # , move
+    return action # move
 
 
 def evalutate_this_move(board_state, enemy, player, move):

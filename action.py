@@ -103,7 +103,7 @@ class Action:
 
     def return_action(self):
         """
-        This function returns the move in the format required by the referee.py
+        This function returns the move in the format required by the referee_old.py
         program
         :return: Tuples depending on whether the move was placement one or
                  movement one

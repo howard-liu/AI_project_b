@@ -14,7 +14,7 @@ from moving_strategy import *
 class Player:
     """
     Enemy player class that is also capable of playing a complete game of
-    'Watch your back' when used in the referee.py program. Serves as a baseline
+    'Watch your back' when used in the referee_old.py program. Serves as a baseline
     to test Player class against.
     """
     def __init__(self, colour):

@@ -212,7 +212,7 @@ class BoardState:
         When called this method will shrink the board and eliminate any pieces
         that are no longer in a legal position.
         IMPORTANT NOTE: COPIES MOST CODE FROM THE SHRINK BOARD METHOD included
-        in referee.py written by Matt Farrugia and Shreyash Patodia
+        in referee_old.py written by Matt Farrugia and Shreyash Patodia
         :return: None
         """
         # Number of shrinks that has currently take place for this current state

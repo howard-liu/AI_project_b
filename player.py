@@ -12,7 +12,7 @@ from moving_strategy import *
 class Player:
     """
     Player class that is capable of playing a complete game of 'Watch your back'
-    when used in the referee.py program
+    when used in the referee_old.py program
     """
     # Each player has 12 pieces
     TOTAL_PIECES = 12
