@@ -68,7 +68,7 @@ class Player:
                                                            self.enemy,
                                                            self.piece),
                               turn_num=turns)
-            action = tree_move(state, 5, 5, self.enemy)
+            action = tree_move(state, 4, 25, self.enemy)
             # action = do_random_move(self.board, self.enemy)
 
             # Alphabeta action here.

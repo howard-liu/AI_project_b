@@ -49,7 +49,7 @@ def generate_moves(board_state, player='W'):
 def find_tiles_of_rank(rank):
     """
     Enter in rank (0-3) (3 is centre) and it will output a list of tuples that
-    are in that circular level of the board
+    are in that circular level of the board.
     :param rank: Int 0 to 3, where 3 is the centre, 0 is the outermost tiles
     :return: List of tuples that are in that level
     """
@@ -91,22 +91,30 @@ def move_towards_centre(board_state, col, row):
     """
     new_row = row
     new_col = col
+
+    # Try to move the piece left only if it is on the far right
     if col > 5:
         new_col = col - 1
+    # Try to move the piece right only if it is on the far left
     elif col < 3:
         new_col = col + 1
+    # If you can't do either dont bother
     if new_col != col:
         try:
+            # See if we can perform this move
             Move(board_state, col, row, new_col, new_row)
         except InvalidMoveError:
             return None
         return new_col, new_row
 
+    # Now try to move the piece upward only if is already down quite low
     if row > 5:
         new_row = row - 1
+    # otherwise try to move it downward only if it is already quite high up
     elif row < 3:
         new_row = row + 1
     if new_row != row:
+        # See if we can legally make this move
         try:
             Move(board_state, col, row, new_col, new_row)
         except InvalidMoveError:
@@ -126,12 +134,14 @@ def move_to_centre_algorithm(board_state, player):
     :param player: Character representing the player piece
     :return: An action
     """
-    # Outside in
+    # Search from the outside inwards
     for x in range(3):
         tile_list = find_tiles_of_rank(x)
         r = list(range(len(tile_list)))
         # random.shuffle(r)
         for col, row in tile_list:
+            # Finding a tile containing the player's piece on from the outward
+            # ring, to try and move towards the centre
             if board_state.board[col][row] == player:
                 destination = move_towards_centre(board_state, col, row)
                 if destination is not None:

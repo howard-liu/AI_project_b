@@ -39,7 +39,8 @@ def do_random_place(board_state, enemy):
         return action
 
 
-# <Helper functions for blacklist_bad_tiles() that are sort of duplicated and can be moved if there is time>
+# <Helper functions for blacklist_bad_tiles() that are sort of duplicated
+# and can be moved if there is time>
 
 def look_up(col, row):
     if row == 0:
@@ -64,7 +65,8 @@ def look_right(col, row):
         return None
     return col + 1, row
 
-# </Helper functions for blacklist_bad_tiles() that are sort of duplicated and can be moved if there is time>
+# </Helper functions for blacklist_bad_tiles() that are sort of duplicated
+#  and can be moved if there is time>
 
 
 def find_tiles_of_rank(rank):
@@ -111,29 +113,31 @@ def priority_eliminate(board_state, enemy, player):
     # Priorities the centre, because it is more valuable in the future
     for x in range(3, 0, -1):
         tile_list = find_tiles_of_rank(x)
-        # r = list(range(len(tile_list)))
-        for y in range(len(tile_list)):
-            if board_state.output_piece(tile_list[y][0], tile_list[y][1]) == enemy:
-                # Check down
-                down = look_down(tile_list[y][0], tile_list[y][1])
-                up = look_up(tile_list[y][0], tile_list[y][1])
-                if board_state.output_piece(up[0], up[1]) == '-':
-                    while board_state.output_piece(down[0], down[1]) not in [enemy, '-']:
-                        return look_up(tile_list[y][0], tile_list[y][1])
+        for col, row in tile_list:
+            if board_state.board[col][row] == enemy:
+
+                up = look_up(col, row)
+                down = look_down(col, row)
+                left = look_left(col, row)
+                right = look_right(col, row)
+
                 # Check up
+                if board_state.board[up[0]][up[1]] == '-':
+                    while board_state.output_piece(down[0], down[1]) not in [enemy, '-']:
+                        return look_up(col, row)
+                # Check down
                 if board_state.output_piece(down[0], down[1]) == '-':
                     while board_state.output_piece(up[0], up[1]) not in [enemy, '-']:
-                        return look_down(tile_list[y][0], tile_list[y][1])
+                        return look_down(col, row)
+
                 # Check left
-                left = look_left(tile_list[y][0], tile_list[y][1])
-                right = look_right(tile_list[y][0], tile_list[y][1])
                 if board_state.output_piece(right[0], right[1]) == '-':
                     while board_state.output_piece(left[0], left[1]) not in [enemy, '-']:
-                        return look_right(tile_list[y][0], tile_list[y][1])
+                        return look_right(col, row)
                 # Check right
                 if board_state.output_piece(left[0], left[1]) == '-':
                     while board_state.output_piece(right[0], right[1]) not in [enemy, '-']:
-                        return look_left(tile_list[y][0], tile_list[y][1])
+                        return look_left(col, row)
     return None
 
 
