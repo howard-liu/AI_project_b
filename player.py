@@ -63,15 +63,14 @@ class Player:
             action = check_easy_elimination(self.board, self.enemy, self.piece)
             # action = do_random_move(self.board, self.enemy)
 
-            # Alphabeta action here. Currently performs much worse.
-            # Probably need to improve evaluation function
+            # # Alphabeta action here.
             # state = GameState(to_move=self.piece,
             #                   utility=self.game.compute_eval(self.board, self.piece),
-            #                   board_state=deepcopy(self.board),
+            #                   board_state=self.board,
             #                   moves=generate_moves(self.board, self.piece),
             #                   turn_num=self.total_turns+1)
             # action = do_alphabeta_action(state, self.game)
-
+            #
             self.board.modify(action, self.enemy)
 
         # Increment total actions since we have played yet another action

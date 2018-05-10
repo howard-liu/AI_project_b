@@ -8,6 +8,7 @@ from action import *
 from move import generate_moves
 from board_state import *
 from minimax import *
+from evaluation import *
 
 
 def do_random_move(board_state, enemy):
@@ -38,22 +39,13 @@ def do_random_move(board_state, enemy):
 
 def do_alphabeta_action(state, game):
     """
-
-    :param state:
-    :param game:
+    This function uses the Alpha Beta algorithm with a depth cutoff, to return
+    the best action advised by the evaluation function
+    :param state: A GameState object
+    :param game: A WatchYourBack game representing the rules of the game during
+                 the movement phase
     :return:
     """
-    def eval_fn(state):
-        # Getting the enemy character
-        if state.to_move == 'O':
-            enemy = '@'
-        else:
-            enemy = 'O'
-
-        # Return the difference in our pieces
-        return len(state.board_state.search_board_char(state.to_move)) - \
-               len(state.board_state.search_board_char(enemy))
-
     best_move = alphabeta_cutoff_search(state, game, d=4, eval_fn=eval_fn)
 
     # Getting the enemy character

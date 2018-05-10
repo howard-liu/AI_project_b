@@ -344,7 +344,7 @@ def count_pos_moves(board_state, player='W'):
     return valid_count
 
 
-def is_suicide(board_state, col, row):
+def is_suicide(board_state, col, row, enemy):
     """
     This function checks if a place where the white piece is moving to will
     cause it to die
@@ -352,86 +352,102 @@ def is_suicide(board_state, col, row):
                         game.
     :param col: Destination column
     :param row: Destination row
+    :param enemy: Character representing the enemies piece
     :return: True if the piece will be killed there and False otherwise
     """
 
-    if board_state.check_horiz_elim('@', col, row):
+    if board_state.check_horiz_elim(tuple(enemy), col, row):
         return True
-    elif board_state.check_vert_elim('@', col, row):
+    elif board_state.check_vert_elim(tuple(enemy), col, row):
         return True
     else:
         return False
 
 
-def check_piece(board_state, goal_tiles, col, row):
+def check_piece(board_state, goal_tiles, col, row, enemy):
     """
     This function checks if there are any desirable spots surrounding the piece
-    :param board_state:
+    used during the movement phase to direct piece movement.
+    A desirable state is defined as
+        - A spot that can kill an enemy piece
+    :param board_state: A BoardState object
     :param goal_tiles: An existing list to add the goal tile to
     :param col: The col number of piece to check
     :param row: The row number of piece to check
+    :param enemy: Character representing an enemy piece
     :return: None
     """
 
     # Checking vertical
     if row-1 >= board_state.min_row and row+1 <= board_state.max_row:
         # Check the top side of the piece
-        if board_state.board[col][row-1] == 'O' or \
-           board_state.board[col][row-1] == 'X':
+        if board_state.board[col][row-1] == 'X':
             # If occupied check the other side for a free space
-            if board_state.board[col][row+1] != '@':
-                goal_tiles.append((col, row+1))
+            if board_state.board[col][row+1] != enemy:
+                if not is_suicide(board_state, col, row+1, enemy):
+                    goal_tiles.append((col, row+1))
         # Check the bottom side of the piece
-        elif board_state.board[col][row+1] == 'O' or \
-                board_state.board[col][row+1] == 'X':
+        elif board_state.board[col][row+1] == 'X':
             # If occupied check the other side for a free space
-            if board_state.board[col][row-1] != '@':
-                goal_tiles.append((col, row-1))
+            if board_state.board[col][row-1] != enemy:
+                if not is_suicide(board_state, col, row-1, enemy):
+                    goal_tiles.append((col, row-1))
         # Check if top is empty and bottom is empty
-        elif board_state.board[col][row-1] == '-' and \
-                board_state.board[col][row+1] == '-':
-            goal_tiles.append((col, row-1))
-            goal_tiles.append((col, row+1))
+        elif board_state.board[col][row-1] != enemy and \
+                board_state.board[col][row+1] != enemy:
+            if not is_suicide(board_state, col, row - 1, enemy):
+                goal_tiles.append((col, row-1))
+            if not is_suicide(board_state, col, row + 1, enemy):
+                goal_tiles.append((col, row+1))
 
     # Checking horizontal
     if col-1 >= board_state.min_col and col+1 <= board_state.max_col:
         # Check left side of the piece
-        if board_state.board[col-1][row] == 'O' or \
-           board_state.board[col-1][row] == 'X':
+        if board_state.board[col-1][row] == 'X':
             # If occupied check the other side for a free space
-            if board_state.board[col+1][row] != '@':
-                goal_tiles.append((col+1, row))
+            if board_state.board[col+1][row] != enemy:
+                if not is_suicide(board_state, col+1, row, enemy):
+                    goal_tiles.append((col+1, row))
         # Check the right side of the piece
-        elif board_state.board[col+1][row] == 'O' or \
-                board_state.board[col+1][row] == 'X':
+        elif board_state.board[col+1][row] == 'X':
             # If occupied check the other side for a free space
-            if board_state.board[col-1][row] != '@':
-                goal_tiles.append((col-1, row))
+            if board_state.board[col-1][row] != enemy:
+                if not is_suicide(board_state, col-1, row, enemy):
+                    goal_tiles.append((col-1, row))
         # Check if left is empty and right is empty
-        elif board_state.board[col-1][row] == '-' and \
-                board_state.board[col+1][row] == '-':
-            goal_tiles.append((col-1, row))
-            goal_tiles.append((col+1, row))
-
+        elif board_state.board[col-1][row] != enemy and \
+                board_state.board[col+1][row] != enemy:
+            if not is_suicide(board_state, col-1, row, enemy):
+                goal_tiles.append((col-1, row))
+            if not is_suicide(board_state, col+1, row, enemy):
+                goal_tiles.append((col+1, row))
     return
 
 
-def find_goal_tiles(board_state):
+def find_goal_tiles(board_state, piece):
     """
     This function finds where the presence of a white piece would eliminate a
     black or be on the side of a black
     :param board_state: A BoardState object containing the current state of the
                         game
+    :param piece: A character that represents our player's pieces
     :return goal_tiles: A list of goal coordinates
     """
+
+    # Get the enemy character
+    if piece == 'O':
+        enemy = '@'
+    else:
+        enemy = 'O'
+
     goal_tiles = []
-    blacks = board_state.search_board('B')
-    while len(blacks) != 0:
-        current_black = blacks.pop()
-        col = current_black[0]
-        row = current_black[1]
+    enemies = board_state.search_board_char(enemy)
+    while len(enemies) != 0:
+        curr_enemy = enemies.pop()
+        col = curr_enemy[0]
+        row = curr_enemy[1]
         # Check the piece
-        check_piece(board_state, goal_tiles, col, row)
+        check_piece(board_state, goal_tiles, col, row, enemy)
 
     # Convert into a set then back to list to remove duplicates
     return list(set(goal_tiles))
