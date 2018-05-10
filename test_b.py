@@ -11,6 +11,7 @@ from placing_strategy import *
 from moving_strategy import *
 from watch_your_back import *
 from board_tree import *
+from evaluation import *
 
 player = Player('white')
 enemy_player = ep.Player('black')
@@ -22,12 +23,23 @@ board.modify(Action(board, '@', (4, 3)), '@')
 board.modify(Action(board, 'O', (5, 4)), 'O')
 board.modify(Action(board, '@', (5, 3)), '@')
 board.modify(Action(board, 'O', (4, 5)), 'O')
+# board.modify(Action(board, 'O', (6, 7)), 'O')
 print(board)
 
-initial = GameState(to_move='O', utility=0, board_state=deepcopy(board),
-                    moves=generate_moves(board, 'W'))
+piece_locs = board.search_board_char('O')
+goal_spots = find_goal_tiles(board, 'O')
 
-tree = BoardTree(initial)
+# goals = find_goal_tiles(board, 'O')
+#
+# for col, row in goals:
+#     board.board[col][row] = 'G'
+#
+# print(board)
+
+# initial = GameState(to_move='O', utility=0, board_state=deepcopy(board),
+#                     moves=generate_moves(board, 'W'))
+#
+# tree = BoardTree(initial)
 
 
 

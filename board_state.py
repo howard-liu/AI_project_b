@@ -346,7 +346,6 @@ class BoardState:
                     it
         :param row: Row value of the piece to check if the enemy has surrounded
                     it
-        :param enemy: A character representing the enemy piece
         :return: None
         """
         enemy = self.__get_enemies__(self.board[col][row])

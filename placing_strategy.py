@@ -134,10 +134,13 @@ def blacklist_bad_tiles(board_state, enemy, player):
     Checks up, down, left, right of all enemy tiles to give a list of 'blacklisted' tiles
     :param board_state: The current state of the board
     :param enemy: Character representing the enemy piece
+    :param player:
     :return: List of tuples that should not be placed
     """
     if enemy == 'O':
-        enemy = 'W'
+        player = 'W'
+    else:
+        player = 'O'
     enemy_tiles = board_state.search_board(enemy)
     tile_list = []
     for enemy_tile in enemy_tiles:
@@ -230,7 +233,6 @@ def centre_place_strategy(board_state, enemy, player):
                 # if player == '@':
                 #     print(black_listed_tiles)
                 if is_not_in_list(black_listed_tiles, tile_list[y]):
-                    print(tile_list[y])
                     # For testing (DELETE WHEN RESOLVED)
                     # print('action to be: ' + str((tile_list[y][0], tile_list[y][1])))
                     action = Action(board_state, enemy, action=(tile_list[y][0], tile_list[y][1]))

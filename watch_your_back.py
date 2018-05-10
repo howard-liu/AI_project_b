@@ -24,8 +24,6 @@ class WatchYourBack:
 
         # This refers to the initial game state at the beginning of the
         # movement phase
-        # self.initial = GameState(to_move='O', utility=0, board_state=start_state,
-        #                          moves=generate_moves(start_state, 'W'))
         self.initial_state = start_state
 
     def actions(self, state):
@@ -39,10 +37,11 @@ class WatchYourBack:
 
     def result(self, state, move):
         """
-
-        :param state:
-        :param move:
-        :return:
+        This function takes a state and move, then produces the resulting game
+        state that occurs from performing the given move
+        :param state: A GameState object
+        :param move: A Move object representing a movement action
+        :return: GameState object containing the resultant GameState
         """
         output_board = deepcopy(state.board_state)
         move_action = Action(output_board, state.to_move, move=move)
