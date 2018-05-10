@@ -4,6 +4,8 @@
 # for Part B of the project.
 ###
 
+#---------------------------PLEASE MARK THIS FILE------------------------------#
+
 from move_generator import *
 from placing_strategy import *
 from moving_strategy import *

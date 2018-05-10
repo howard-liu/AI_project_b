@@ -230,8 +230,8 @@ def _space_check(limit):
     curr_mem_usage -= _DEFAULT_MEM_USAGE
     peak_mem_usage -= _DEFAULT_MEM_USAGE
 
-    # print(f"space: {curr_mem_usage:.3f}MB (current usage) "
-    #     + f"{peak_mem_usage:.3f}MB (max usage) (both players)")
+    print(f"space: {curr_mem_usage:.3f}MB (current usage) "
+        + f"{peak_mem_usage:.3f}MB (max usage) (both players)")
     
     # if we are limited, let's hope we are not out of space!
     # double the limit because space usage is shared
@@ -263,7 +263,7 @@ class _CountdownTimer:
         # accumulate elapsed time since __enter__
         elapsed = time.process_time() - self.start
         self.clock += elapsed
-        # print(f"time: {elapsed:.3f}s (this turn), {self.clock:.3f}s (total)")
+        print(f"time: {elapsed:.3f}s (this turn), {self.clock:.3f}s (total)")
 
         # if we are limited, let's hope we aren't out of time!
         if self.limit and self.clock > self.limit:
