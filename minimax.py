@@ -11,6 +11,7 @@ def alphabeta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
     """
     Search game to determine best action; use alpha-beta pruning.
     This version cuts off search and uses an evaluation function.
+    Taken from AIMA textbook libraries
     :param state:
     :param game:
     :param d:
