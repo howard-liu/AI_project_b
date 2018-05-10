@@ -102,15 +102,6 @@ def find_tiles_of_rank(rank):
     return tile_dict[rank]
 
 
-# Find positions of enemy
-# For each positions of enemy
-# Check up down left right for non-enemy, non-blank pieces
-# If found, place at the opposite side
-
-# TODO
-# Update blacklist with safe squares (my piece may be protected from behind)
-# Check for suicide before placing
-
 def priority_eliminate(board_state, enemy, player):
     """
     If there is a piece that player can eliminate, output the tuple of move that will do it
@@ -299,7 +290,7 @@ def centre_place_strategy(board_state, enemy, player):
 
     def_move = defend_piece(board_state, enemy, player)
     if def_move is not None and min_row <= def_move[1] <= max_row:
-        if is_not_in_list(black_listed_tiles, def_move):
+        if def_move not in black_listed_tiles:
             action = Action(board_state, enemy, action=(def_move[0], def_move[1]))
             print('ACTION: ' + str(def_move))
             return action

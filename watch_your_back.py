@@ -6,7 +6,7 @@
 from board_state import *
 from copy import *
 from collections import namedtuple
-from move import generate_moves
+from moving_strategy import check_easy_elimination
 from action import *
 
 # This is namedtuple for quickly storing different attributes of a game state
@@ -63,7 +63,8 @@ class WatchYourBack:
         return GameState(to_move=enemy,
                          utility=self.compute_eval(output_board, enemy),
                          board_state=output_board,
-                         moves=generate_moves(output_board, enemy),
+                         moves=check_easy_elimination(output_board,
+                                                      state.to_move, enemy),
                          turn_num=state.turn_num + 1)
 
     def cutoff_test(self):
