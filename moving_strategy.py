@@ -131,8 +131,7 @@ def move_to_centre_algorithm(board_state, enemy, player, possmoves):
                 destination = move_towards_centre(board_state, tile_list[y][0], tile_list[y][1], enemy)
                 if destination is not None:
                     move = Move(board_state, tile_list[y][0], tile_list[y][1], destination[0], destination[1])
-                    action = Action(board_state, enemy, action=None, move=move)
-                    return action
+                    return move
 
 
 def check_move_for_elimination(board_state, enemy, player, move):
@@ -166,6 +165,7 @@ def check_easy_elimination(board_state, enemy, player):
     :param player: Character representing the player piece
     :return: An action
     """
+    move_list = []
     # Get a list of all the current moves that the play could possibly make
     if enemy == '@':
         # If black is the enemy, then get poss_moves for white pieces
@@ -182,19 +182,17 @@ def check_easy_elimination(board_state, enemy, player):
         for move in poss_moves:
             if check_move_for_elimination(board_state, enemy, player, move):
                 # print('CHECK')
+                move_list.append(move)
                 action = Action(board_state, enemy, action=None, move=move)
                 break
-        if action is None:
-            # Try move to centre
-            action = move_to_centre_algorithm(board_state, enemy, player, poss_moves)
-            if action is None:
-                # Random move
-                move = poss_moves[random.randint(0, len(poss_moves)-1)]
-                action = Action(board_state, enemy, action=None, move=move)
+        # Try move to centre
+        move_list.append(move_to_centre_algorithm(board_state, enemy, player, poss_moves))
+        # Random move
+        move_list.append(poss_moves[random.randint(0, len(poss_moves)-1)])
     else:
         action = None
 
-    return action # move
+    return move_list
 
 
 def evalutate_this_move(board_state, enemy, player, move):
