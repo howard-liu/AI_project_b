@@ -1,18 +1,87 @@
 COMP30024 AI "Watch your Back!" Player
 AI design by Edmond Pan and Yu-Hao Liu
 
+File to MARK
+- Please mark the player file named player.py
+
 Program Structure
+
+player.py
+- The main class that handled playing a full game of Watch your back!
+- It would keep its own internal representation of the board
+- Also coordinated the different placing and movement strategies
+
+enemy_player.py
+- Copy of player.py with its previously implemented strategies
+- This class was used as a benchmark player to play against player.py
+
+board_state.py
+Describes the BoardState class.
+- It was responsible for being the internal representation used by the Player class
+  and took updates from enemy actions as well as the players own action to mirror the 
+  referees board
+- Also allowed searching of the board for pieces
+- Handling rules of the game such as eliminating and shrinking the board
+
+board_tree.py
+- This contains the BoardTree class which describes a tree datastructure to hold game states
+- It allowed for the restriction of the depth and branching factor of the created tree
+- Also responsible for providing the sequence of moves that lead to a game state
+
+evaluation.py
+- This module contained functions used to evaluate a given board state
+
+minimax.py
+- This module contained a function that implemented Alpha Beta pruning
+- It was not as effective as the other strategies so it was dropped
+
+action.py
+- Describes a wrapper class that handled converting the action representation into 
+  corresponding placement or movement type actions to be performed on the board
+- Is also capable of returning the action representation of a Move objec
+
+move.py:
+Describes the Move class. It handles:
+- Checking if move is valid (both placement and movement)
+- Checking if a move commits suicide
+- Finding locations on the board that were desirable to move towards
+
+move_generator.py
+- This Python module contained functions that generated possible moves to do for
+  a given game state
+- Finding all possible moves for a given board state
+- It was also capable of selecting useful moves for a given state and restricted the 
+  decision space
+
+placing_strategy.py
+- This Python module contained the functions responsible for deciding how to place pieces 
+  onto the board
+
+moving_strategy.py
+- This Python module contained the functions responsible for deciding how to move pieces
+  during the movement phase of the game
+
+test_b.py
+- This was a simply Python file used to test different functions that were implemented to ensure
+  that they were working correctly
+
+watch_your_back.py
+- This describes a class that represents the rules of a Watch your back game during the movement 
+  phase only
+- It was responsible for generating a new state given a move
+
 
 AI Strategies/Design Approach
 - Split the game into its 2 major phases with different algorithms for deciding moves based on which phase the game was currently in
 
 - Our strategy revolves around the centre squares
 - They are the most powerful as time goes on due to the board shinking
+- Did not implement a formal search algorithm studied.
 
 Place:
 - Current placing phase considerations:
 	- If 1 place will eliminate a piece
-	- Blacklists suicide tiles 
+	- Blacklists suicide tiles so that no piece would be placed upon them
 	- Else, Defends a piece that has been advanced upon
 	- Else, places at a random valid tile, starting from the centre
 
@@ -21,8 +90,13 @@ Move:
 	- If 1 move will eliminate a piece
     - Else, move pieces towards the centre from the outermost pieces
     - Else, do a random valid move
+- The movement strategy also involved generating a search tree of restricted depth and branching factor to 
+  predict ahead what possible moves the enemy player might do as well as the best moves we could do to counter
+- The evaluation function was used to 
 
-- Each move uses a search tree and an evaluation function to find the best possible move
+- Each move uses a search tree and the evaluation function to find the best possible move by
+  looking ahead a certain number of turns, then finding out which of the states would be the best for our player
+  and then picking a move that would possibly lead to that state
 
 - Our evaluation function takes into account:
 	- The number of our minus enemy pieces
@@ -31,9 +105,10 @@ Move:
 - This makes our player agressive, but smart
 - Movement phase also had algorithms to consider board shrinkage and its effect on pieces and corresponding strategies
 
-- Strategies for placing phase
-    - Machine Learning for choosing optimal positions for placement with the scoring function to maximise player's while eliminating as many of
-      the enemies pieces as possible
+Creative aspects
+- Utilising a centre-based strategy for this type of game, as they would allow to most freedom of movement for pieces
+  while also preventing other enemy pieces from easily killing the pieces in the centre
+- Specialised search tree used for deciding the next best move to take
 
 Additional Tools/Resources
-- AIMA textbook
+- AIMA textbook libraries

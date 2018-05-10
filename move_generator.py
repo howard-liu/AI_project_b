@@ -49,7 +49,7 @@ def generate_moves(board_state, player='W'):
 def find_tiles_of_rank(rank):
     """
     Enter in rank (0-3) (3 is centre) and it will output a list of tuples that
-    are in that circular level of the board
+    are in that circular level of the board.
     :param rank: Int 0 to 3, where 3 is the centre, 0 is the outermost tiles
     :return: List of tuples that are in that level
     """
@@ -80,7 +80,7 @@ def find_tiles_of_rank(rank):
     return tile_dict[rank]
 
 
-def move_towards_centre(board_state, col, row, enemy):
+def move_towards_centre(board_state, col, row):
     """
     Outputs tuple, destination of moving a piece towards the centre
     :param board_state: The current state of the board
@@ -91,22 +91,30 @@ def move_towards_centre(board_state, col, row, enemy):
     """
     new_row = row
     new_col = col
+
+    # Try to move the piece left only if it is on the far right
     if col > 5:
         new_col = col - 1
+    # Try to move the piece right only if it is on the far left
     elif col < 3:
         new_col = col + 1
+    # If you can't do either dont bother
     if new_col != col:
         try:
+            # See if we can perform this move
             Move(board_state, col, row, new_col, new_row)
         except InvalidMoveError:
             return None
         return new_col, new_row
 
+    # Now try to move the piece upward only if is already down quite low
     if row > 5:
         new_row = row - 1
+    # otherwise try to move it downward only if it is already quite high up
     elif row < 3:
         new_row = row + 1
     if new_row != row:
+        # See if we can legally make this move
         try:
             Move(board_state, col, row, new_col, new_row)
         except InvalidMoveError:
@@ -116,7 +124,7 @@ def move_towards_centre(board_state, col, row, enemy):
     return None
 
 
-def move_to_centre_algorithm(board_state, enemy, player, possmoves):
+def move_to_centre_algorithm(board_state, player):
     """
     An algorithm that moves pieces towards the centre, starting from the outermost area
     This is strong because it means that we can stall until the board shrinks
@@ -126,17 +134,21 @@ def move_to_centre_algorithm(board_state, enemy, player, possmoves):
     :param player: Character representing the player piece
     :return: An action
     """
-    # Outside in
+    # Search from the outside inwards
     for x in range(3):
         tile_list = find_tiles_of_rank(x)
         r = list(range(len(tile_list)))
         # random.shuffle(r)
-        for y in r:
-            if board_state.output_piece(tile_list[y][0], tile_list[y][1]) == player:
-                destination = move_towards_centre(board_state, tile_list[y][0], tile_list[y][1], enemy)
+        for col, row in tile_list:
+            # Finding a tile containing the player's piece on from the outward
+            # ring, to try and move towards the centre
+            if board_state.board[col][row] == player:
+                destination = move_towards_centre(board_state, col, row)
                 if destination is not None:
-                    move = Move(board_state, tile_list[y][0], tile_list[y][1], destination[0], destination[1])
+                    move = Move(board_state, col, row, destination[0], destination[1])
                     return move
+
+    return
 
 
 def check_move_for_elimination(board_state, enemy, player, move):
@@ -183,12 +195,14 @@ def check_easy_elimination(board_state, enemy, player):
     # poss_moves = [x for x in poss_moves if x not in move_list]
 
     if len(poss_moves) != 0:
+        # First check if there are any moves that we can kill the enemy with
         for move in poss_moves:
             if check_move_for_elimination(board_state, enemy, player, move):
-                # print('CHECK')
                 move_list.append(move)
         # Try move to centre
-        move_list.append(move_to_centre_algorithm(board_state, enemy, player, poss_moves))
+        attempt = move_to_centre_algorithm(board_state, player)
+        if attempt is not None:
+            move_list.append(attempt)
         # Random move
         move_list.append(poss_moves[random.randint(0, len(poss_moves)-1)])
 
