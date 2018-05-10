@@ -278,43 +278,6 @@ class Move:
             return False
 
 
-def generate_moves(board_state, player='W'):
-    """
-    This function generates a list of all possible Moves that the player
-    can make given the current board state
-    :param board_state: 
-    :param player: A character to identify which player to create moves for.
-                   Defaults to the white player
-    :return: A list of Move objects representing all valid, possible moves
-    """
-    poss_moves = []
-    piece_locs = board_state.search_board(player)
-    # For each piece, create the valid moves.
-    for coord in piece_locs:
-        # Checking possible up movement
-        new_loc = Move.check_up(board_state, coord[0], coord[1])
-        if new_loc:
-            poss_moves.append(Move(board_state, coord[0], coord[1],
-                                   new_loc[0], new_loc[1]))
-        # Checking possible down movement
-        new_loc = Move.check_down(board_state, coord[0], coord[1])
-        if new_loc:
-            poss_moves.append(Move(board_state, coord[0], coord[1],
-                                   new_loc[0], new_loc[1]))
-        # Checking possible left movement
-        new_loc = Move.check_left(board_state, coord[0], coord[1])
-        if new_loc:
-            poss_moves.append(Move(board_state, coord[0], coord[1],
-                                   new_loc[0], new_loc[1]))
-        # Checking possible right movement
-        new_loc = Move.check_right(board_state, coord[0], coord[1])
-        if new_loc:
-            poss_moves.append(Move(board_state, coord[0], coord[1],
-                                   new_loc[0], new_loc[1]))
-
-    return poss_moves
-
-
 def count_pos_moves(board_state, player='W'):
     """
     This function counts the total number of legal moves available for player

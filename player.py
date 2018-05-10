@@ -4,7 +4,7 @@
 # for Part B of the project.
 ###
 
-from board_state import *
+from move_generator import *
 from placing_strategy import *
 from moving_strategy import *
 from watch_your_back import *
@@ -59,8 +59,16 @@ class Player:
             self.board.modify(action, self.enemy)
         else:
             # We enter the movement phase of the game
-            # action = evaluate_depth(self.board, self.enemy, self.piece, self.DEPTH, self.MAX_BREADTH)
-            action = check_easy_elimination(self.board, self.enemy, self.piece)
+            # action = check_easy_elimination(self.board, self.enemy, self.piece)
+            state = GameState(to_move=self.piece,
+                              utility=self.game.compute_eval(self.board,
+                                                             self.piece),
+                              board_state=self.board,
+                              moves=check_easy_elimination(self.board,
+                                                           self.enemy,
+                                                           self.piece),
+                              turn_num=self.total_turns+1)
+            action = tree_move(state, 2, 2, self.enemy)
             # action = do_random_move(self.board, self.enemy)
 
             # Alphabeta action here.
@@ -86,7 +94,9 @@ class Player:
                 # Create the initial state of the game at the movement stage
                 initial = GameState(to_move=self.enemy, utility=0,
                                     board_state=deepcopy(self.board),
-                                    moves=generate_moves(self.board, self.enemy),
+                                    moves=check_easy_elimination(self.board,
+                                                                 self.piece,
+                                                                 self.enemy),
                                     turn_num=self.total_turns)
                 self.game = WatchYourBack(initial)
         if self.phase == 'moving':

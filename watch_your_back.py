@@ -6,8 +6,9 @@
 from board_state import *
 from copy import *
 from collections import namedtuple
-from moving_strategy import check_easy_elimination
+from move_generator import check_easy_elimination
 from action import *
+from evaluation import *
 
 # This is namedtuple for quickly storing different attributes of a game state
 GameState = namedtuple('GameState', 'to_move, utility, board_state, moves, '
@@ -59,7 +60,6 @@ class WatchYourBack:
             output_board.shrink_board()
         elif state.turn_num == 191:
             output_board.shrink_board()
-
         return GameState(to_move=enemy,
                          utility=self.compute_eval(output_board, enemy),
                          board_state=output_board,
@@ -109,24 +109,29 @@ class WatchYourBack:
     def compute_eval(self, state, to_move):
         """
         This eval function can calculate a value using a few different ways
-            - Subtract the current number of our pieces with the number of enemy pieces on
-              the board. (This would be one feature)
-            - Use the distances to goal tiles as previously implemented with massacre
+            - Subtract the current number of our pieces with the number of enemy
+              pieces on the board.
+            - Use the distances to goal tiles
+            - Get the number of tiles that are already on goal tiles
             
-        :param state:
+        :param state: A BoardState object
         :param to_move: Character indicating whose turn it is for the current
                         state
-        :return: 
+        :return: A float
         """
-        # Getting the enemy character
-        if to_move == 'O':
-            enemy = '@'
-        else:
-            enemy = 'O'
 
-        # Return the difference in our pieces
-        return len(state.search_board_char(to_move)) - \
-               len(state.search_board_char(enemy))
+        alpha = 3.0
+        beta = 2.0
+        gamma = 1.0
+
+        piece_locs = state.search_board_char(to_move)
+        goal_spots = find_goal_tiles(state, to_move)
+
+        match = count_matching_goal(goal_spots, piece_locs)
+        dist = inverse_sum_distances(piece_locs, goal_spots)
+        diff = diff_piece(state, to_move)
+
+        return (alpha * diff) + (beta * match) + (gamma * dist)
 
 
 

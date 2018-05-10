@@ -28,6 +28,8 @@ class Player:
             self.piece = '@'
         # Create an empty board state to fill later
         self.board = BoardState()
+        # Variable to fill in later to contain Game rules for moving phase
+        self.game = None
         # Counter to store the number of turns the player has done since the
         # start of the game
         self.total_actions = 0
@@ -51,8 +53,17 @@ class Player:
             self.board.modify(action, self.enemy)
         else:
             # We enter the movement phase of the game
-            action = check_easy_elimination(self.board, self.enemy, self.piece)
+            # action = check_easy_elimination(self.board, self.enemy, self.piece)
             # action = do_random_move(self.board, self.enemy)
+            state = GameState(to_move=self.piece,
+                              utility=self.game.compute_eval(self.board,
+                                                             self.piece),
+                              board_state=self.board,
+                              moves=check_easy_elimination(self.board,
+                                                           self.enemy,
+                                                           self.piece),
+                              turn_num=self.total_turns+1)
+            action = tree_move(state, 2, 2, self.enemy)
             self.board.modify(action, self.enemy)
 
         # Increment total actions since we have played yet another action
@@ -65,6 +76,14 @@ class Player:
                 self.phase = 'moving'
                 # Reset turns
                 self.total_turns = 0
+                # Create the initial state of the game at the movement stage
+                initial = GameState(to_move=self.enemy, utility=0,
+                                    board_state=deepcopy(self.board),
+                                    moves=check_easy_elimination(self.board,
+                                                                 self.piece,
+                                                                 self.enemy),
+                                    turn_num=self.total_turns)
+                self.game = WatchYourBack(initial)
         if self.phase == 'moving':
             # Check if we have to shrink the board. Occurs at the end of turns
             # 127 and 191.
