@@ -192,7 +192,7 @@ def check_easy_elimination(board_state, enemy, player):
     else:
         action = None
 
-    return move_list
+    return move_list 
 
 
 def evalutate_this_move(board_state, enemy, player, move):
