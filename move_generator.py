@@ -178,7 +178,6 @@ def check_easy_elimination(board_state, enemy, player):
     else:
         # White is the enemy, possible moves for white
         poss_moves = generate_moves(board_state, 'B')
-    action = None
 
     # Remove moves in list from poss_moves
     # poss_moves = [x for x in poss_moves if x not in move_list]
@@ -188,13 +187,9 @@ def check_easy_elimination(board_state, enemy, player):
             if check_move_for_elimination(board_state, enemy, player, move):
                 # print('CHECK')
                 move_list.append(move)
-                action = Action(board_state, enemy, action=None, move=move)
-                break
         # Try move to centre
         move_list.append(move_to_centre_algorithm(board_state, enemy, player, poss_moves))
         # Random move
         move_list.append(poss_moves[random.randint(0, len(poss_moves)-1)])
-    else:
-        action = None
 
     return move_list
