@@ -70,18 +70,36 @@ def look_right(col, row):
 
 def find_tiles_of_rank(rank):
     """
-    Enter in rank (0-3) (3 is centre) and it will spit out a list of tuples that are in that rank
+    Enter in rank (0-3) (3 is centre) and it will output a list of tuples that
+    are in that circular level of the board
     :param rank: Int 0 to 3, where 3 is the centre, 0 is the outermost tiles
-    :return: List of tuples that are in the rank
+    :return: List of tuples that are in that level
     """
-    tile_rank = [([(0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (1, 0), (1, 7),(2, 0), (2, 7), (3, 0), (3, 7),
-                   (4, 0), (4, 7), (5, 0), (5, 7), (6, 0), (6, 7), (7, 1), (7, 2), (7, 3), (7, 4), (7, 5), (7, 6)]),
-                 ([(1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (2, 1), (2, 6), (3, 1), (3, 6),
-                   (4, 1), (4, 6), (5, 1), (5, 6), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6)]),
-                 ([(2, 2), (2, 3), (2, 4), (2, 5), (3, 2), (3, 5), (4, 2), (4, 5), (5, 2), (5, 3), (5, 4), (5, 5)]),
-                 ([(3, 3), (3, 4), (4, 3), (4, 4)])]
+    tile_dict = {0: [
+                     (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6),
+                     (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0),
+                     (1, 7), (2, 7), (3, 7), (4, 7), (5, 7), (6, 7),
+                     (7, 1), (7, 2), (7, 3), (7, 4), (7, 5), (7, 6)
+                    ],
+                 1: [
+                     (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6),
+                     (2, 1), (3, 1), (4, 1), (5, 1),
+                     (2, 6), (3, 6), (4, 6), (5, 6),
+                     (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6)
+                    ],
+                 2: [
+                     (2, 2), (2, 3), (2, 4), (2, 5),
+                     (3, 2), (4, 2),
+                     (3, 5), (4, 5),
+                     (5, 2), (5, 3), (5, 4), (5, 5)
+                    ],
+                 3: [
+                     (3, 3), (3, 4),
+                     (4, 3), (4, 4)
+                    ]
+                 }
 
-    return tile_rank[rank]
+    return tile_dict[rank]
 
 
 # Find positions of enemy
@@ -103,8 +121,8 @@ def priority_eliminate(board_state, enemy, player):
     # Priorities the centre, because it is more valuable in the future
     for x in range(3, 0, -1):
         tile_list = find_tiles_of_rank(x)
-        r = list(range(len(tile_list)))
-        for y in r:
+        # r = list(range(len(tile_list)))
+        for y in range(len(tile_list)):
             if board_state.output_piece(tile_list[y][0], tile_list[y][1]) == enemy:
                 # Check down
                 down = look_down(tile_list[y][0], tile_list[y][1])
@@ -131,14 +149,16 @@ def priority_eliminate(board_state, enemy, player):
 
 def blacklist_bad_tiles(board_state, enemy, player):
     """
-    Checks up, down, left, right of all enemy tiles to give a list of 'blacklisted' tiles
+    Checks up, down, left, right of all enemy tiles to give a list of
+    'blacklisted' tiles. A blacklisted tile is defined as a tile where:
+        -
     :param board_state: The current state of the board
     :param enemy: Character representing the enemy piece
     :param player:
     :return: List of tuples that should not be placed
     """
     if enemy == 'O':
-        player = 'W'
+        player = '@'
     else:
         player = 'O'
     enemy_tiles = board_state.search_board(enemy)
@@ -161,7 +181,7 @@ def blacklist_bad_tiles(board_state, enemy, player):
             up_up = look_up(up[0], up[1])
         if left is not None:
             left_left = look_left(left[0], left[1])
-        if right_right is not None:
+        if right is not None:
             right_right = look_right(right[0], right[1])
 
         if down_down is not None:
@@ -177,6 +197,67 @@ def blacklist_bad_tiles(board_state, enemy, player):
             if board_state.output_piece(right_right[0], right_right[1]) != player:
                 tile_list.append(look_right(enemy_tile[0], enemy_tile[1]))
     return tile_list
+
+
+def find_bad_spots(board_state, piece):
+    """
+    This function finds the spots that are considered bad to place on.
+    :param board_state:
+    :param piece:
+    :return: A list of tuples that represent tiles that our pieces should not
+             be placed on
+    """
+    black_list = []
+    # Get enemy character
+    if piece == 'O':
+        enemy = '@'
+    else:
+        enemy = 'O'
+
+    # Search across all the enemy pieces on the board
+    for col, row in board_state.search_board_char(enemy):
+        check_bad_spot_piece(board_state, black_list, col, row, piece)
+
+    # Convert into set to remove duplicates and then return as list
+    return list(set(black_list))
+
+
+def check_bad_spot_piece(board_state, black_list, col, row, player):
+    """
+    This function highlights the spots around an enemy piece that would be
+    considered bad to place on. These spots are bad if:
+        - They are directly next to the enemy piece unless if placing next to
+          the enemy piece would allow our piece to kill it
+    :param board_state:
+    :param black_list:
+    :param col:
+    :param row:
+    :param player:
+    :return:
+    """
+    # Tuple storing pieces that can eliminate the enemy piece
+    killer = ('X', player)
+
+    # Checking above and below the piece
+    if row-1 >= board_state.min_row and row+1 <= board_state.max_row:
+        # Check if there is one of our pieces, that would allow us to kill this
+        # enemy piece
+        if board_state.board[col][row+1] not in killer:
+            black_list.append((col, row-1))
+        # Now checking below
+        if board_state.board[col][row-1] not in killer:
+            black_list.append((col, row+1))
+
+    # Checking to the left of the piece
+    if col-1 >= board_state.min_col and col+1 <= board_state.max_col:
+        # Check if there is one of our pieces, that would allow us to kill this
+        # enemy piece
+        if board_state.board[col+1][row] not in killer:
+            black_list.append((col-1, row))
+        # Checking to the right of the piece now
+        if board_state.board[col-1][row] not in killer:
+            black_list.append((col+1, row))
+    return
 
 
 def is_not_in_list(list_of_tiles, tile):
@@ -199,20 +280,22 @@ def centre_place_strategy(board_state, enemy, player):
     """
     Simple strategy that prioritises centre tiles
     - If there is a place that can eliminate an enemy piece, it will do it
-    - Does not place at squares next to an enemy piece (enemy can take the next turn)
+    - Does not place at squares next to an enemy piece (enemy can take the
+      next turn)
     :param board_state: The current state of the board
     :param enemy: Character representing the enemy piece
     :param player: Character representing the player piece
     :return: An action
     """
-    min_row = 0
-    max_row = 7
+    min_row = board_state.min_row
+    max_row = board_state.max_row
     # If our player is using black pieces
     if player == 'O':
         max_row = 5
     # If our player is using white pieces
     elif player == '@':
         min_row = 2
+
     kill_tile = priority_eliminate(board_state, enemy, player)
     if kill_tile is not None and min_row <= kill_tile[1] <= max_row:
         # print('Killtile: ' + str(kill_tile[0]) + ',' + str(kill_tile[1]))
@@ -229,10 +312,12 @@ def centre_place_strategy(board_state, enemy, player):
         random.shuffle(r)
         for y in r:
             if board_state.output_piece(tile_list[y][0], tile_list[y][1]) == '-':
-                black_listed_tiles = blacklist_bad_tiles(board_state, enemy, player)
+                # black_listed_tiles = blacklist_bad_tiles(board_state, enemy, player)
+                black_listed_tiles = find_bad_spots(board_state, player)
                 # if player == '@':
                 #     print(black_listed_tiles)
-                if is_not_in_list(black_listed_tiles, tile_list[y]):
+                # if is_not_in_list(black_listed_tiles, tile_list[y]):
+                if tile_list[y] not in black_listed_tiles:
                     # For testing (DELETE WHEN RESOLVED)
                     # print('action to be: ' + str((tile_list[y][0], tile_list[y][1])))
                     action = Action(board_state, enemy, action=(tile_list[y][0], tile_list[y][1]))
@@ -240,6 +325,7 @@ def centre_place_strategy(board_state, enemy, player):
                     # print('action: ' + str(action))
                     if action is not None:
                         return action
-    return None
+    # otherwise just do a random move
+    return do_random_place(board_state, enemy)
 
 

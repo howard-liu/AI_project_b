@@ -23,18 +23,19 @@ board.modify(Action(board, '@', (4, 3)), '@')
 board.modify(Action(board, 'O', (5, 4)), 'O')
 board.modify(Action(board, '@', (5, 3)), '@')
 board.modify(Action(board, 'O', (4, 5)), 'O')
-# board.modify(Action(board, 'O', (6, 7)), 'O')
+board.modify(Action(board, '@', (3, 5)), '@')
 print(board)
 
-piece_locs = board.search_board_char('O')
-goal_spots = find_goal_tiles(board, 'O')
+# blacklist = blacklist_bad_tiles(board, 'O', None)
+blacklist = []
+for col, row in board.search_board_char('@'):
+    check_bad_spot_piece(board, blacklist, col, row, 'O')
 
-# goals = find_goal_tiles(board, 'O')
-#
-# for col, row in goals:
-#     board.board[col][row] = 'G'
-#
-# print(board)
+for col, row in blacklist:
+    board.board[col][row] = 'B'
+
+print(board)
+
 
 # initial = GameState(to_move='O', utility=0, board_state=deepcopy(board),
 #                     moves=generate_moves(board, 'W'))
