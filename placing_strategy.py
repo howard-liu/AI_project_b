@@ -41,7 +41,6 @@ def do_random_place(board_state, enemy):
 
 # <Helper functions for blacklist_bad_tiles() that are sort of duplicated and can be moved if there is time>
 
-# Shitty wrap fix
 def look_up(col, row):
     if row == 0:
         return None
@@ -200,6 +199,13 @@ def check_bad_spot_piece(board_state, black_list, col, row, player):
 
 
 def defend_piece(board_state, enemy, player):
+    """
+    If a piece is advanced upon, defend it
+    :param board_state: The current state of the board
+    :param enemy: Character representing the enemy piece
+    :param player: Character representing the player piece
+    :return: An tuple depicting a move
+    """
     enemy_list = []
 
     for x in range(3, 0, -1):
