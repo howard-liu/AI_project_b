@@ -56,36 +56,16 @@ def do_alphabeta_action(state, game):
     return Action(state.board_state, enemy, action=None, move=best_move)
 
 
-def evalutate_this_move(board_state, enemy, player, move):
-    temp_board_state = BoardState(None, board_state)
-    action = Action(board_state, enemy, action=None, move=move)
-    temp_board_state.modify(action, enemy)
-    if enemy == 'O':
-        enemy = 'W'
-    return len(temp_board_state.search_board(player)) - len(board_state.search_board(enemy))
-
-
-def generate_move(board_state, enemy):
-    # Generate possible move
-    # Get a list of all the current moves that the play could possibly make
-    if enemy == '@':
-        # If black is the enemy, then get poss_moves for white pieces
-        poss_moves = generate_moves(board_state, 'W')
-    else:
-        # White is the enemy, possible moves for white
-        poss_moves = generate_moves(board_state, 'B')
-    return poss_moves
-
-
 def tree_move(state, d, b, enemy):
     """
     This function will look ahead a few moves, and then pick the move that may
     lead us down the best choice
-    :param state:
-    :param d:
-    :param b:
-    :param enemy:
-    :return:
+    :param state: A namedtuple GameState object containing attributes recording
+                 the information of the current state of the game
+    :param d: The depth to create the tree to
+    :param b: The branching factor of the tree
+    :param enemy: A character that represents the enemy piece
+    :return: An action or random move if no action was returned
     """
 
     # Create a board tree with the specified depth and breadth from the

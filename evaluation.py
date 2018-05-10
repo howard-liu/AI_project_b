@@ -7,7 +7,14 @@ from move import *
 
 
 def count_matching_goal(goal_spots, piece_locs):
-
+    """
+    This function counts how many pieces are in the same position as goal tiles
+    :param goal_spots: A list of coordinates that refer to the position of
+                       goal tiles
+    :param piece_locs: A list of coordinates that refer to the positions of
+                       the players pieces
+    :return:
+    """
     num_match = 0
     # Count up all the pieces that are on a goal spot.
     for p in piece_locs:
@@ -34,9 +41,11 @@ def inverse_sum_distances(piece_locs, goal_spots):
     This function sums the distances to the closest goal tiles for each piece
     not already on a goal tile. It then inverses this sum, so that the smaller
     the distances are, the greater the value returned will be
-    :param piece_locs:
-    :param goal_spots:
-    :return:
+    :param piece_locs: A list of coordinates that refer to the positions of
+                       the players pieces
+    :param goal_spots: A list of coordinates that refer to the position of
+                       goal tiles
+    :return: Float representing the inverse distance
     """
 
     total = 0
@@ -63,9 +72,11 @@ def diff_piece(board_state, piece):
     """
     This function returns the difference in number between our pieces and the
     enemies
-    :param board_state:
-    :param piece:
-    :return:
+    :param board_state: A BoardState object containing the current state of the
+                        game
+    :param piece: A character representing our player's piece
+    :return: An integer reprsenting the difference in pieces. Positive means
+             our player has more than the enemy and negative means less.
     """
     if piece == 'O':
         enemy = '@'
@@ -80,13 +91,13 @@ def eval_fn(game_state):
     """
     The function that will return an approximation of how good a current state
     is
-    :return:
+    :return: A float
     """
     piece = game_state.to_move
     board_state = game_state.board_state
 
     # These variables contain the weights for the 3 features used
-    alpha = 3.0
+    alpha = 10.0
     beta = 2.0
     gamma = 1.0
 

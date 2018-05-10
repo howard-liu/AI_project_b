@@ -1,7 +1,8 @@
 ###
 # This Python file contains some experimental implementations of the Minimax
 # algorithm based on the ones provided in AIMA textbook libraries
-# They also contain custom variations made to suit the game of Watch your Back!
+# This was used to experiment with how well minimax and alphabeta etc. would
+# perform.
 ###
 
 infinity = float('inf')
@@ -12,12 +13,14 @@ def alphabeta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
     Search game to determine best action; use alpha-beta pruning.
     This version cuts off search and uses an evaluation function.
     Taken from AIMA textbook libraries
-    :param state:
-    :param game:
-    :param d:
-    :param cutoff_test:
-    :param eval_fn:
-    :return:
+    :param state: A namedtuple GameState containing attributes of a game state
+    :param game: A WatchYourBack game object representing the rules of the game
+                 during the movement phase only
+    :param d: An integer referring to the depth to search to
+    :param cutoff_test: Defaults to None. Specified only if you want to cutoff
+                        the search in another way that does not use depth
+    :param eval_fn: The evaluation function used to determine how good a state is
+    :return: The best action to perform according to alpha beta search
     """
 
     player = game.to_move(state)

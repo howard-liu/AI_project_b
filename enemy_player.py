@@ -5,6 +5,9 @@
 # will be tweaked to use older strategies of our Player class whenever a new
 # one is being tested.
 ###
+#
+#------------------------------ DO NOT MARK THIS FILE -------------------------#
+#
 
 from board_state import *
 from placing_strategy import *
@@ -54,7 +57,7 @@ class Player:
         else:
             # We enter the movement phase of the game
             # action = check_easy_elimination(self.board, self.enemy, self.piece)
-            # action = do_random_move(self.board, self.enemy)
+            action = do_random_move(self.board, self.enemy)
             state = GameState(to_move=self.piece,
                               utility=self.game.compute_eval(self.board,
                                                              self.piece),
@@ -62,7 +65,7 @@ class Player:
                               moves=check_easy_elimination(self.board,
                                                            self.enemy,
                                                            self.piece),
-                              turn_num=self.total_turns+1)
+                              turn_num=turns)
             action = tree_move(state, 2, 2, self.enemy)
             self.board.modify(action, self.enemy)
 

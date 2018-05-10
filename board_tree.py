@@ -56,12 +56,6 @@ class BoardTree:
                             children.append(child)
                 frontier.extend(children)
 
-        # READ THIS
-        # - After evaluating on all of the leaf nodes, we select the one
-        #   with the best utility value/highest value from the eval function
-        # - Then to get the move that would reach the state with the best
-        #   performing utility function we simply type in the node.solution()[0]
-
 
 class Node:
     # IMPORTANT NOTE: This class has been adapted from the classes provided
@@ -170,6 +164,7 @@ class Node:
 
     def __hash__(self):
         return hash(self.game_state.board_state)
+
 
 class Stack:
     """
