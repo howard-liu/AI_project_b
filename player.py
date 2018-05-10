@@ -67,8 +67,8 @@ class Player:
                               moves=check_easy_elimination(self.board,
                                                            self.enemy,
                                                            self.piece),
-                              turn_num=self.total_turns+1)
-            action = tree_move(state, 2, 2, self.enemy)
+                              turn_num=turns)
+            action = tree_move(state, 5, 5, self.enemy)
             # action = do_random_move(self.board, self.enemy)
 
             # Alphabeta action here.

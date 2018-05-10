@@ -80,7 +80,7 @@ def find_tiles_of_rank(rank):
     return tile_dict[rank]
 
 
-def move_towards_centre(board_state, col, row, enemy):
+def move_towards_centre(board_state, col, row):
     """
     Outputs tuple, destination of moving a piece towards the centre
     :param board_state: The current state of the board
@@ -116,7 +116,7 @@ def move_towards_centre(board_state, col, row, enemy):
     return None
 
 
-def move_to_centre_algorithm(board_state, enemy, player, possmoves):
+def move_to_centre_algorithm(board_state, player):
     """
     An algorithm that moves pieces towards the centre, starting from the outermost area
     This is strong because it means that we can stall until the board shrinks
@@ -131,12 +131,14 @@ def move_to_centre_algorithm(board_state, enemy, player, possmoves):
         tile_list = find_tiles_of_rank(x)
         r = list(range(len(tile_list)))
         # random.shuffle(r)
-        for y in r:
-            if board_state.output_piece(tile_list[y][0], tile_list[y][1]) == player:
-                destination = move_towards_centre(board_state, tile_list[y][0], tile_list[y][1], enemy)
+        for col, row in tile_list:
+            if board_state.board[col][row] == player:
+                destination = move_towards_centre(board_state, col, row)
                 if destination is not None:
-                    move = Move(board_state, tile_list[y][0], tile_list[y][1], destination[0], destination[1])
+                    move = Move(board_state, col, row, destination[0], destination[1])
                     return move
+
+    return
 
 
 def check_move_for_elimination(board_state, enemy, player, move):
@@ -183,12 +185,14 @@ def check_easy_elimination(board_state, enemy, player):
     # poss_moves = [x for x in poss_moves if x not in move_list]
 
     if len(poss_moves) != 0:
+        # First check if there are any moves that we can kill the enemy with
         for move in poss_moves:
             if check_move_for_elimination(board_state, enemy, player, move):
-                # print('CHECK')
                 move_list.append(move)
         # Try move to centre
-        move_list.append(move_to_centre_algorithm(board_state, enemy, player, poss_moves))
+        attempt = move_to_centre_algorithm(board_state, player)
+        if attempt is not None:
+            move_list.append(attempt)
         # Random move
         move_list.append(poss_moves[random.randint(0, len(poss_moves)-1)])
 
