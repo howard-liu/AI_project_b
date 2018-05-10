@@ -84,11 +84,11 @@ class WatchYourBack:
         :return:
         """
 
-        # Terminal test if there is only one piece left on our side or the enemy
+        # Terminal test if there is only 0 pieces left on our side or the enemy
         # side
-        if len(state.board_state.search_board('W')) <= 1:
+        if len(state.board_state.search_board('W')) <= 0:
             return True
-        elif len(state.board_state.search_board('B')) <= 1:
+        elif len(state.board_state.search_board('B')) <= 0:
             return True
         elif len(state.board_state.search_board_char('-')) == 0:
             # No more empty spaces
