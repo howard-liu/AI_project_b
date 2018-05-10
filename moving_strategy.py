@@ -101,4 +101,10 @@ def tree_move(state, d, b, enemy):
         if eval_fn(node.game_state) > eval_score:
             optimal_node = node
 
-    return Action(state.board_state,  enemy, move=optimal_node.solution()[0])
+    poss_action = Action(state.board_state,  enemy, move=optimal_node.solution()[0])
+
+    if poss_action:
+        return poss_action
+    else:
+        # Do a random move
+        return do_random_move(state.board_state, enemy)
