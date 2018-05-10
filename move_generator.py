@@ -159,7 +159,6 @@ def check_move_for_elimination(board_state, enemy, player, move):
 
 
 def check_easy_elimination(board_state, enemy, player):
-    ''', move_list'''
     """
     Simple strategy:
     - Check for 1 move elimination
@@ -188,7 +187,9 @@ def check_easy_elimination(board_state, enemy, player):
                 # print('CHECK')
                 move_list.append(move)
         # Try move to centre
-        move_list.append(move_to_centre_algorithm(board_state, enemy, player, poss_moves))
+        move_to_centre = move_to_centre_algorithm(board_state, enemy, player, poss_moves)
+        if move_to_centre is not None:
+            move_list.append(move_to_centre)
         # Random move
         move_list.append(poss_moves[random.randint(0, len(poss_moves)-1)])
 

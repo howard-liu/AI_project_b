@@ -1,17 +1,39 @@
 COMP30024 AI "Watch your Back!" Player
-AI design by Edmond Pan and Howard Liu
+AI design by Edmond Pan and Yu-Hao Liu
 
 Program Structure
 
 AI Strategies/Design Approach
 - Split the game into its 2 major phases with different algorithms for deciding moves based on which phase the game was currently in
+
+- Our strategy revolves around the centre squares
+- They are the most powerful as time goes on due to the board shinking
+
+Place:
+- Current placing phase considerations:
+	- If 1 place will eliminate a piece
+	- Blacklists suicide tiles 
+	- Else, Defends a piece that has been advanced upon
+	- Else, places at a random valid tile, starting from the centre
+
+Move:
+- Current moving phase considerations for 1 'move':
+	- If 1 move will eliminate a piece
+    - Else, move pieces towards the centre from the outermost pieces
+    - Else, do a random valid move
+
+- Each move uses a search tree and an evaluation function to find the best possible move
+
+- Our evaluation function takes into account:
+	- The number of our minus enemy pieces
+	- Pieces that are set up to take enemy pieces
+	- Total distance between our pieces and enemy pieces
+- This makes our player agressive, but smart
+- Movement phase also had algorithms to consider board shrinkage and its effect on pieces and corresponding strategies
+
 - Strategies for placing phase
     - Machine Learning for choosing optimal positions for placement with the scoring function to maximise player's while eliminating as many of
       the enemies pieces as possible
-    - 
-- Movement phase also had algorithms to consider board shrinkage and its effect on pieces and corresponding strategies
-
-
-
 
 Additional Tools/Resources
+- AIMA textbook

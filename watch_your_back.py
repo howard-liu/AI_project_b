@@ -120,7 +120,7 @@ class WatchYourBack:
         :return: A float
         """
 
-        alpha = 3.0
+        alpha = 10.0
         beta = 2.0
         gamma = 1.0
 
