@@ -7,6 +7,7 @@ import random
 from action import *
 from move import generate_moves
 from board_state import *
+from minimax import *
 
 
 def do_random_move(board_state, enemy):
@@ -33,6 +34,36 @@ def do_random_move(board_state, enemy):
         action = None
 
     return action
+
+
+def do_alphabeta_action(state, game):
+    """
+
+    :param state:
+    :param game:
+    :return:
+    """
+    def eval_fn(state):
+        # Getting the enemy character
+        if state.to_move == 'O':
+            enemy = '@'
+        else:
+            enemy = 'O'
+
+        # Return the difference in our pieces
+        return len(state.board_state.search_board_char(state.to_move)) - \
+               len(state.board_state.search_board_char(enemy))
+
+    best_move = alphabeta_cutoff_search(state, game, d=4, eval_fn=eval_fn)
+
+    # Getting the enemy character
+    if state.to_move == 'O':
+        enemy = '@'
+    else:
+        enemy = 'O'
+
+    # Convert to an action and return
+    return Action(state.board_state, enemy, action=None, move=best_move)
 
 
 # Copied from placing_strategy
