@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="682de59d-397c-43b8-aca2-2b8ad53a73c7" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/comments.txt" beforeDir="false" afterPath="$PROJECT_DIR$/comments.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -40,8 +41,8 @@
       <file leaf-file-name="move_generator.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/move_generator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="800">
-              <caret line="166" column="28" lean-forward="true" selection-start-line="166" selection-start-column="28" selection-end-line="166" selection-end-column="28" />
+            <state relative-caret-position="980">
+              <caret line="178" column="28" lean-forward="true" selection-start-line="178" selection-start-column="28" selection-end-line="178" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -60,7 +61,11 @@
       </file>
       <file leaf-file-name="comments.txt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/comments.txt">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="605">
+              <caret line="110" column="55" selection-start-line="110" selection-start-column="55" selection-end-line="110" selection-end-column="55" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file leaf-file-name="moving_strategy.py" pinned="false" current-in-tab="false">
@@ -129,6 +134,7 @@
         <option value="$PROJECT_DIR$/enemy_player.py" />
         <option value="$PROJECT_DIR$/move_generator.py" />
         <option value="$PROJECT_DIR$/watch_your_back.py" />
+        <option value="$PROJECT_DIR$/comments.txt" />
       </list>
     </option>
   </component>
@@ -187,8 +193,8 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/moving_strategy.py</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/watch_your_back.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/comments.txt</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/move_generator.py</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Created" />
@@ -424,16 +430,24 @@
       <option name="project" value="LOCAL" />
       <updated>1525962613268</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="comments updated">
+      <created>1525963000550</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1525963000550</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="839" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32984293" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="7" visible="true" weight="0.32941177" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32941177" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32984293" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.4157068" />
       <window_info anchor="bottom" id="Terminal" order="7" />
@@ -827,8 +841,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/move_generator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="800">
-          <caret line="166" column="28" lean-forward="true" selection-start-line="166" selection-start-column="28" selection-end-line="166" selection-end-column="28" />
+        <state relative-caret-position="980">
+          <caret line="178" column="28" lean-forward="true" selection-start-line="178" selection-start-column="28" selection-end-line="178" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -843,7 +857,11 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/comments.txt">
-      <provider selected="true" editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="605">
+          <caret line="110" column="55" selection-start-line="110" selection-start-column="55" selection-end-line="110" selection-end-column="55" />
+        </state>
+      </provider>
     </entry>
   </component>
 </project>

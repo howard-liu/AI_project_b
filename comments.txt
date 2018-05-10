@@ -24,7 +24,7 @@ Describes the BoardState class.
 - Handling rules of the game such as eliminating and shrinking the board
 
 board_tree.py
-- This contains the BoardTree class which describes a tree datastructure to hold game states
+- This contains the BoardTree class which describes a tree data structure to hold game states
 - It allowed for the restriction of the depth and branching factor of the created tree
 - Also responsible for providing the sequence of moves that lead to a game state
 
@@ -75,7 +75,7 @@ AI Strategies/Design Approach
 - Split the game into its 2 major phases with different algorithms for deciding moves based on which phase the game was currently in
 
 - Our strategy revolves around the centre squares
-- They are the most powerful as time goes on due to the board shinking
+- They are the most powerful as time goes on due to the board shrinking
 - Did not implement a formal search algorithm studied.
 
 Place:
@@ -102,12 +102,13 @@ Move:
 	- The number of our minus enemy pieces
 	- Pieces that are set up to take enemy pieces
 	- Total distance between our pieces and enemy pieces
-- This makes our player agressive, but smart
+- This makes our player aggressive, but smart
 - Movement phase also had algorithms to consider board shrinkage and its effect on pieces and corresponding strategies
 
 Creative aspects
 - Utilising a centre-based strategy for this type of game, as they would allow to most freedom of movement for pieces
   while also preventing other enemy pieces from easily killing the pieces in the centre
+- Utility-based algorithm to sort the moves for minimax
 - Specialised search tree used for deciding the next best move to take
 
 Additional Tools/Resources
