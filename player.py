@@ -13,7 +13,7 @@ from watch_your_back import *
 class Player:
     """
     Player class that is capable of playing a complete game of 'Watch your back'
-    when used in the referee_old.py program
+    when used in the referee.py program
     """
     # Each player has 12 pieces
     TOTAL_PIECES = 12
@@ -60,16 +60,16 @@ class Player:
         else:
             # We enter the movement phase of the game
             # action = evaluate_depth(self.board, self.enemy, self.piece, self.DEPTH, self.MAX_BREADTH)
-            # action = check_easy_elimination(self.board, self.enemy, self.piece)
+            action = check_easy_elimination(self.board, self.enemy, self.piece)
             # action = do_random_move(self.board, self.enemy)
 
-            # # Alphabeta action here.
-            state = GameState(to_move=self.piece,
-                              utility=self.game.compute_eval(self.board, self.piece),
-                              board_state=self.board,
-                              moves=generate_moves(self.board, self.piece),
-                              turn_num=self.total_turns+1)
-            action = do_alphabeta_action(state, self.game)
+            # Alphabeta action here.
+            # state = GameState(to_move=self.piece,
+            #                   utility=self.game.compute_eval(self.board, self.piece),
+            #                   board_state=self.board,
+            #                   moves=generate_moves(self.board, self.piece),
+            #                   turn_num=self.total_turns+1)
+            # action = do_alphabeta_action(state, self.game)
             #
             self.board.modify(action, self.enemy)
 
